@@ -11,6 +11,7 @@ public class ProjectLib {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public ProjectLib() {
+        System.out.println("Hello World! (From Project Lib)");
         MinecraftForge.EVENT_BUS.register(this);
     }
 }
