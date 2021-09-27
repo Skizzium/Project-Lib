@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "Boss Utilities Resources",
+        "description": "${mod_name} Resources",
         "pack_format": 7
     }
 }

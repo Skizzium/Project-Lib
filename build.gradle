@@ -1,25 +1,38 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
+        classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
+        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.1.0'
     }
 }
+
+import com.diluv.schoomp.Webhook
+import com.diluv.schoomp.message.Message
+import com.diluv.schoomp.message.embed.Embed
+import com.diluv.schoomp.message.embed.Footer
+
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: com.matthewprenger.cursegradle.CurseGradlePlugin
 
-version = '1.0.0-alpha.2'
-group = 'com.skizzium.projectlib'
-archivesBaseName = 'bossutilities'
+version = mod_version
+group = mod_base_package
+archivesBaseName = mod_id
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: mappings_channel, version: mappings_version
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
@@ -28,10 +41,15 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                bossutilities {
+                skizzik {
                     source sourceSets.main
                 }
             }
+        }
+
+        client2 {
+            parent(null, "client")
+            args '--username', 'Dev2'
         }
 
         server {
@@ -39,7 +57,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             mods {
-                bossutilities {
+                skizzik {
                     source sourceSets.main
                 }
             }
@@ -49,9 +67,9 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'bossutilities', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                examplemod {
+                skizzik {
                     source sourceSets.main
                 }
             }
@@ -61,25 +79,122 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-repositories {
-
+configurations {
+    library
+    implementation.extendsFrom library
+}
+minecraft.runs.all {
+    lazyToken('minecraft_classpath') {
+        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
+    }
 }
 
+repositories {}
+
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.53'
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+}
+
+// Credits to SizableShrimp for making this neat thingy that allows me to use variables in my mods.toml and pack.mcmeta
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+def intoTargets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
+def replaceProperties = [mod_id: mod_id, mod_name: mod_name, mod_version: mod_version, toml_name: toml_name, mod_license: mod_license, mod_issues: mod_issues,
+                         mod_url: mod_url, mod_logo: mod_logo, mod_credits: mod_credits, mod_authors: mod_authors, mod_description: mod_description,
+                         mc_versionRange: mc_version, forge_version_range: forge_version_range, ]
+processResources {
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
+
+    intoTargets.each { target ->
+        if (file(target).exists()) {
+            copy {
+                from(sourceSets.main.resources) {
+                    include resourceTargets
+                    expand replaceProperties
+                }
+                into target
+            }
+        }
+    }
 }
 
 jar {
+    archiveName = "BossUtilities-"
+    if (mod_version.contains("alpha")) {
+        archiveName += "A" + mod_version.substring(12) + "-"
+    }
+    else if (mod_version.contains("beta")) {
+        archiveName += "B" + mod_version.substring(11) + "-"
+    }
+    archiveName += mod_version.substring(0, 5) + "-" + mc_version + ".jar"
+
+
     manifest {
         attributes([
-                "Specification-Title"     : "bossutilities",
-                "Specification-Vendor"    : "bossutilitiessareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "bossutilitiessareus",
+                "Specification-Title": mod_id,
+                "Specification-Vendor": "Skizzium",
+                "Specification-Version": "1",
+                "Implementation-Title": project.name,
+                "Implementation-Version": mod_version,
+                "Implementation-Vendor": "Skizzium",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
+    }
+}
+
+curseforge {
+    apiKey = cf_token
+
+    project {
+        id = cf_id
+        releaseType = mod_version.contains("alpha") ? "alpha" : mod_version.contains("beta") ? "beta" : "release"
+
+        changelog = file('changelog.txt')
+        changelogType = 'html'
+
+        addGameVersion mc_version
+        addGameVersion 'Forge'
+
+        mainArtifact(jar) {
+            if (mod_version.contains("alpha")) {
+                displayName = mod_name + ": " + update_name + " [" + mod_version.substring(0, 5) + " - Alpha #" + mod_version.substring(12) + "]"
+            }
+            else if (mod_version.contains("beta")) {
+                displayName = mod_name + ": " + update_name + " [" + mod_version.substring(0, 5) + " - Beta #" + mod_version.substring(11) + "]"
+            }
+            else {
+                displayName = mod_name + ": " + update_name + " [" + mod_version + "]"
+            }
+        }
+    }
+}
+
+tasks.getByName("curseforge").doLast {
+    try {
+        def name = tasks.getByName("curseforge${cf_id}").property('mainArtifact').displayName
+        def file = tasks.getByName("curseforge${cf_id}").property('mainArtifact').fileID
+        def webhook = new Webhook(dc_mods_news_webhook, "${mod_name} Gradle Upload")
+
+        def message = new Message()
+        message.setUsername(mod_name)
+        message.setAvatarUrl(logo_url)
+        message.setContent("**${name}** for Minecraft ${mc_version} is out!")
+
+        def embed = new Embed()
+        embed.addField('Changelog', "Available at ${cf_page}/files/${file}", false)
+        embed.addField('Download', "${cf_page}/download/${file}", false)
+
+        embed.setColor(0XB40A1A)
+        message.addEmbed(embed)
+
+        webhook.sendMessage(message)
+    }
+    catch (IOException e) {
+        project.logger.error('Failed to push Discord webhook.')
     }
 }
 
@@ -88,7 +203,6 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId "bossutilities"
             artifact jar
         }
     }
