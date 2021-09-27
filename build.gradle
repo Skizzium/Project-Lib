@@ -203,9 +203,7 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = "BossUtilities-"
-            artifactId += mod_version.substring(0, 5) + "-" + mc_version
-            
+            artifactId = "BossUtilities-" + mc_version
             artifact jar
         }
     }
