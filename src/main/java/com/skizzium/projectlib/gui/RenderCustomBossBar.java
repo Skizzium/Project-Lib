@@ -18,7 +18,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = ProjectLib.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RenderCustomBossBar {
     private static final ResourceLocation GUI_BARS_LOCATION = new ResourceLocation("textures/gui/bars.png");
-    private static final ResourceLocation PA_GUI_BARS_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/pl_bars.png");
+    private static final ResourceLocation PL_GUI_BARS_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/pl_bars.png");
     private static final Minecraft minecraft = Minecraft.getInstance();
 
     @SubscribeEvent
@@ -38,7 +38,7 @@ public class RenderCustomBossBar {
                 drawBar(event.getMatrixStack(), k, j, lerpingEvent);
             }
             else {
-                RenderSystem.setShaderTexture(0, PA_GUI_BARS_LOCATION);
+                RenderSystem.setShaderTexture(0, PL_GUI_BARS_LOCATION);
                 drawBar(event.getMatrixStack(), k, j, (PL_LerpingBossEvent) lerpingEvent);
             }
             Component component = lerpingEvent.getName();
@@ -54,33 +54,33 @@ public class RenderCustomBossBar {
         }
     }
 
-    private static void drawBar(PoseStack pose, int i, int i1, BossEvent bossEvent) {
-        GuiComponent.blit(pose, i, i1, 0, 0, bossEvent.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
+    private static void drawBar(PoseStack pose, int xPos, int yPos, BossEvent bossEvent) {
+        GuiComponent.blit(pose, xPos, yPos, 0, 0, bossEvent.getColor().ordinal() * 5 * 2, 182, 5, 256, 256);
         if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-            GuiComponent.blit(pose, i, i1, 0, 0, 80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
+            GuiComponent.blit(pose, xPos, yPos, 0, 0, 80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
         }
 
         int i2 = (int)(bossEvent.getProgress() * 183.0F);
         if (i2 > 0) {
-            GuiComponent.blit(pose, i, i1, 0, 0, bossEvent.getColor().ordinal() * 5 * 2 + 5, i2, 5, 256, 256);
+            GuiComponent.blit(pose, xPos, yPos, 0, 0, bossEvent.getColor().ordinal() * 5 * 2 + 5, i2, 5, 256, 256);
             if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-                GuiComponent.blit(pose, i, i1, 0, 0, 80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2 + 5, i2, 5, 256, 256);
+                GuiComponent.blit(pose, xPos, yPos, 0, 0, 80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2 + 5, i2, 5, 256, 256);
             }
         }
 
     }
-    
-    private static void drawBar(PoseStack pose, int i, int i1, PL_LerpingBossEvent bossEvent) {
-        GuiComponent.blit(pose, i, i1, 0, 0, bossEvent.getCustomColor().ordinal() * 5 * 2, 182, 5, 256, 256);
-        if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-            GuiComponent.blit(pose, i, i1, 0, 0, 150 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
+
+    private static void drawBar(PoseStack pose, int xPos, int yPos, PL_LerpingBossEvent bossEvent) {
+        GuiComponent.blit(pose, xPos, yPos, 0, 0, bossEvent.getCustomColor().ordinal() * 5 * 2, 182, 5, 256, 256);
+        if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
+            GuiComponent.blit(pose, xPos, yPos, 0, 0, 150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2, 182, 5, 256, 256);
         }
 
         int i2 = (int)(bossEvent.getProgress() * 183.0F);
         if (i2 > 0) {
-            GuiComponent.blit(pose, i, i1, 0, 0, bossEvent.getCustomColor().ordinal() * 5 * 2 + 5, i2, 5, 256, 256);
-            if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-                GuiComponent.blit(pose, i, i1, 0, 0, 150 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2 + 5, i2, 5, 256, 256);
+            GuiComponent.blit(pose, xPos, yPos, 0, 0, bossEvent.getCustomColor().ordinal() * 5 * 2 + 5, i2, 5, 256, 256);
+            if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
+                GuiComponent.blit(pose, xPos, yPos, 0, 0, 150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5, i2, 5, 256, 256);
             }
         }
     }
