@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(ProjectLib.MOD_ID)
 public class ProjectLib {
-    public static final String MOD_ID = "bossutilities";
+    public static final String MOD_ID = "bossutils";
     private static final Logger LOGGER = LogManager.getLogger();
 
     public ProjectLib() {
