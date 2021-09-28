@@ -10,5 +10,4 @@ build/
 run/
 
 src/generated/resources/
-src/main/java/com/skizzium/projectlib/entity/PL_Entities.java
-src/main/java/com/skizzium/projectlib/entity/TestEntity.java
+src/main/java/com/skizzium/projectlib/test
