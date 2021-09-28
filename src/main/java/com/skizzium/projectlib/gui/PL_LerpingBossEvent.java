@@ -15,6 +15,7 @@ public class PL_LerpingBossEvent extends LerpingBossEvent {
     public PL_LerpingBossEvent(UUID uuid, Component displayName, float progressPercentage, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
         super(uuid, displayName, progressPercentage, BossBarColor.WHITE, BossBarOverlay.PROGRESS, darkenScreen, false, fog);
         this.customColor = color;
+        this.customOverlay = overlay;
     }
 
     public PL_BossEvent.PL_BossBarColor getCustomColor() {
