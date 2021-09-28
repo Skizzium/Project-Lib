@@ -1,4 +1,4 @@
-package com.skizzium.projectlib.util;
+package com.skizzium.projectlib.gui;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -19,7 +19,7 @@ public class PL_ServerBossEvent extends PL_BossEvent {
     private final Set<ServerPlayer> unmodifiablePlayers = Collections.unmodifiableSet(this.players);
     private boolean visible = true;
 
-    public PL_ServerBossEvent(Component displayName, PL_BossBarColor color, BossEvent.BossBarOverlay overlay) {
+    public PL_ServerBossEvent(Component displayName, PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay) {
         super(Mth.createInsecureUUID(), displayName, color, overlay);
     }
 
@@ -37,7 +37,7 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         }
     }
 
-    public void setOverlay(BossEvent.BossBarOverlay newOverlay) {
+    public void setOverlay(PL_BossEvent.PL_BossBarOverlay newOverlay) {
         if (newOverlay != this.overlay) {
             super.setOverlay(newOverlay);
             this.broadcast(PL_BossEventPacket::createUpdateStylePacket);

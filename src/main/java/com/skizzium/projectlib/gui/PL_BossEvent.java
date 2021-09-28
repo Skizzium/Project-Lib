@@ -1,4 +1,4 @@
-package com.skizzium.projectlib.util;
+package com.skizzium.projectlib.gui;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -11,11 +11,11 @@ public abstract class PL_BossEvent {
     protected Component name;
     protected float progress;
     protected PL_BossBarColor color;
-    protected BossEvent.BossBarOverlay overlay;
+    protected PL_BossEvent.PL_BossBarOverlay overlay;
     protected boolean darkenScreen;
     protected boolean createWorldFog;
 
-    public PL_BossEvent(UUID uuid, Component displayName, PL_BossBarColor assignedColor, BossEvent.BossBarOverlay choosenOverlay) {
+    public PL_BossEvent(UUID uuid, Component displayName, PL_BossBarColor assignedColor, PL_BossEvent.PL_BossBarOverlay choosenOverlay) {
         this.id = uuid;
         this.name = displayName;
         this.color = assignedColor;
@@ -51,11 +51,11 @@ public abstract class PL_BossEvent {
         this.color = newColor;
     }
 
-    public BossEvent.BossBarOverlay getOverlay() {
+    public PL_BossEvent.PL_BossBarOverlay getOverlay() {
         return this.overlay;
     }
 
-    public void setOverlay(BossEvent.BossBarOverlay newOverlay) {
+    public void setOverlay(PL_BossEvent.PL_BossBarOverlay newOverlay) {
         this.overlay = newOverlay;
     }
 
@@ -116,6 +116,35 @@ public abstract class PL_BossEvent {
                 }
             }
             return WHITE;
+        }
+    }
+
+    public static enum PL_BossBarOverlay {
+        PROGRESS("progress"),
+        NOTCHED_5("notched_5"),
+        NOTCHED_6("notched_6"),
+        NOTCHED_10("notched_10"),
+        NOTCHED_12("notched_12"),
+        NOTCHED_20("notched_20");
+
+        private final String name;
+
+        private PL_BossBarOverlay(String givenName) {
+            this.name = givenName;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public static PL_BossEvent.PL_BossBarOverlay byName(String nameToSearch) {
+            for(PL_BossEvent.PL_BossBarOverlay overlayEnum : values()) {
+                if (overlayEnum.name.equals(nameToSearch)) {
+                    return overlayEnum;
+                }
+            }
+
+            return PROGRESS;
         }
     }
 }

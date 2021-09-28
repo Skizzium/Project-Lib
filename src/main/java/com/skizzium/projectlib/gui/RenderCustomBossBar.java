@@ -3,7 +3,6 @@ package com.skizzium.projectlib.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.skizzium.projectlib.ProjectLib;
-import com.skizzium.projectlib.util.PL_LerpingBossEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.LerpingBossEvent;

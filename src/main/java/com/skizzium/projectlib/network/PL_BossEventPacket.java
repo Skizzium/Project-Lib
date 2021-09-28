@@ -1,8 +1,8 @@
 package com.skizzium.projectlib.network;
 
 import com.google.common.collect.Maps;
-import com.skizzium.projectlib.util.PL_BossEvent;
-import com.skizzium.projectlib.util.PL_LerpingBossEvent;
+import com.skizzium.projectlib.gui.PL_BossEvent;
+import com.skizzium.projectlib.gui.PL_LerpingBossEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.FriendlyByteBuf;
@@ -110,7 +110,7 @@ public class PL_BossEventPacket implements Packet<ClientGamePacketListener> {
     public void handlePacket(PL_BossEventPacket packet) {
         packet.dispatch(new Handler() {
             final Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
-            public void add(UUID uuid, Component displayName, float progress, PL_BossEvent.PL_BossBarColor color, BossEvent.BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
+            public void add(UUID uuid, Component displayName, float progress, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
                 vanillaEvents.put(uuid, new PL_LerpingBossEvent(uuid, displayName, progress, color, overlay, darkenScreen, fog));
             }
 
@@ -126,10 +126,10 @@ public class PL_BossEventPacket implements Packet<ClientGamePacketListener> {
                 vanillaEvents.get(uuid).setName(displayName);
             }
 
-            public void updateStyle(UUID uuid, PL_BossEvent.PL_BossBarColor color, BossEvent.BossBarOverlay overlay) {
+            public void updateStyle(UUID uuid, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay) {
                 PL_LerpingBossEvent lerpingBossEvent = (PL_LerpingBossEvent) vanillaEvents.get(uuid);
                 lerpingBossEvent.setCustomColor(color);
-                lerpingBossEvent.setOverlay(overlay);
+                lerpingBossEvent.setCustomOverlay(overlay);
             }
 
             public void updateProperties(UUID uuid, boolean darkenScreen, boolean fog) {
@@ -148,7 +148,7 @@ public class PL_BossEventPacket implements Packet<ClientGamePacketListener> {
         private final Component name;
         private final float progress;
         private final PL_BossEvent.PL_BossBarColor color;
-        private final BossEvent.BossBarOverlay overlay;
+        private final PL_BossEvent.PL_BossBarOverlay overlay;
         private final boolean darkenScreen;
         private final boolean createWorldFog;
 
@@ -165,7 +165,7 @@ public class PL_BossEventPacket implements Packet<ClientGamePacketListener> {
             this.name = buffer.readComponent();
             this.progress = buffer.readFloat();
             this.color = buffer.readEnum(PL_BossEvent.PL_BossBarColor.class);
-            this.overlay = buffer.readEnum(BossEvent.BossBarOverlay.class);
+            this.overlay = buffer.readEnum(PL_BossEvent.PL_BossBarOverlay.class);
             int i = buffer.readUnsignedByte();
             this.darkenScreen = (i & 1) > 0;
             this.createWorldFog = (i & 4) > 0;
@@ -189,7 +189,7 @@ public class PL_BossEventPacket implements Packet<ClientGamePacketListener> {
     }
 
     public interface Handler {
-        default void add(UUID uuid, Component name, float progress, PL_BossEvent.PL_BossBarColor color, BossEvent.BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
+        default void add(UUID uuid, Component name, float progress, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
         }
 
         default void remove(UUID uuid) {
@@ -201,7 +201,7 @@ public class PL_BossEventPacket implements Packet<ClientGamePacketListener> {
         default void updateName(UUID uuid, Component name) {
         }
 
-        default void updateStyle(UUID uuid, PL_BossEvent.PL_BossBarColor color, BossEvent.BossBarOverlay overlay) {
+        default void updateStyle(UUID uuid, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay) {
         }
 
         default void updateProperties(UUID uuid, boolean darkenScreen, boolean fog) {
@@ -309,16 +309,16 @@ public class PL_BossEventPacket implements Packet<ClientGamePacketListener> {
 
     static class UpdateStyleOperation implements Operation {
         private final PL_BossEvent.PL_BossBarColor color;
-        private final BossEvent.BossBarOverlay overlay;
+        private final PL_BossEvent.PL_BossBarOverlay overlay;
 
-        UpdateStyleOperation(PL_BossEvent.PL_BossBarColor newColor, BossEvent.BossBarOverlay newOverlay) {
+        UpdateStyleOperation(PL_BossEvent.PL_BossBarColor newColor, PL_BossEvent.PL_BossBarOverlay newOverlay) {
             this.color = newColor;
             this.overlay = newOverlay;
         }
 
         private UpdateStyleOperation(FriendlyByteBuf buffer) {
             this.color = buffer.readEnum(PL_BossEvent.PL_BossBarColor.class);
-            this.overlay = buffer.readEnum(BossEvent.BossBarOverlay.class);
+            this.overlay = buffer.readEnum(PL_BossEvent.PL_BossBarOverlay.class);
         }
 
         public OperationType getType() {
