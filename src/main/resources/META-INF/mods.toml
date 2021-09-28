@@ -12,13 +12,13 @@ logoFile="${mod_logo}"
 credits="${mod_credits}"
 authors="${mod_authors}"
 description='''${mod_description}'''
-[[dependencies.skizzik]]
+[[dependencies.bossutils]]
     modId="forge"
     mandatory=true
     versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
-[[dependencies.skizzik]]
+[[dependencies.bossutils]]
     modId="minecraft"
     mandatory=true
     versionRange="${mc_versionRange}"
