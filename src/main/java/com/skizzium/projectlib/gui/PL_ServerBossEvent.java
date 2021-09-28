@@ -3,16 +3,16 @@ package com.skizzium.projectlib.gui;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.skizzium.projectlib.network.PL_BossEventPacket;
+import com.skizzium.projectlib.init.PL_PacketRegistry;
+import com.skizzium.projectlib.network.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.BossEvent;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.function.Function;
 
 public class PL_ServerBossEvent extends PL_BossEvent {
     private final Set<ServerPlayer> players = Sets.newHashSet();
@@ -23,69 +23,67 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         super(Mth.createInsecureUUID(), displayName, color, overlay);
     }
 
-    public void setProgress(float newProgress) {
-        if (newProgress != this.progress) {
-            super.setProgress(newProgress);
-            this.broadcast(PL_BossEventPacket::createUpdateProgressPacket);
-        }
-    }
-
-    public void setColor(PL_BossBarColor newColor) {
-        if (newColor != this.color) {
-            super.setColor(newColor);
-            this.broadcast(PL_BossEventPacket::createUpdateStylePacket);
-        }
-    }
-
-    public void setOverlay(PL_BossEvent.PL_BossBarOverlay newOverlay) {
-        if (newOverlay != this.overlay) {
-            super.setOverlay(newOverlay);
-            this.broadcast(PL_BossEventPacket::createUpdateStylePacket);
-        }
-    }
-
-    public PL_BossEvent setDarkenScreen(boolean newValue) {
-        if (newValue != this.darkenScreen) {
-            super.setDarkenScreen(newValue);
-            this.broadcast(PL_BossEventPacket::createUpdatePropertiesPacket);
-        }
-        return this;
-    }
-
-    public PL_BossEvent setCreateWorldFog(boolean newValue) {
-        if (newValue != this.createWorldFog) {
-            super.setCreateWorldFog(newValue);
-            this.broadcast(PL_BossEventPacket::createUpdatePropertiesPacket);
-        }
-        return this;
-    }
-
-    public void setName(Component newName) {
-        if (!Objects.equal(newName, this.name)) {
-            super.setName(newName);
-            this.broadcast(PL_BossEventPacket::createUpdateNamePacket);
-        }
-    }
-
-    private void broadcast(Function<PL_BossEvent, PL_BossEventPacket> function) {
+    private void broadcast(Object packet) {
         if (this.visible) {
-            PL_BossEventPacket bossEventPacket = function.apply(this);
-
-            for(ServerPlayer serverplayer : this.players) {
-                serverplayer.connection.send(bossEventPacket);
+            for(ServerPlayer player : this.players) {
+                PL_PacketRegistry.INSTANCE.sendTo(packet, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
             }
         }
     }
+    
+    public void setName(Component newName) {
+        if (!Objects.equal(newName, this.name)) {
+            super.setName(newName);
+            this.broadcast(new PL_UpdateNameBossEventPacket(this));
+        }
+    }
 
+    public void setColor(PL_BossBarColor color) {
+        if (color != this.color) {
+            super.setColor(color);
+            this.broadcast(new PL_UpdateStyleBossEventPacket(this));
+        }
+    }
+
+    public void setOverlay(PL_BossEvent.PL_BossBarOverlay overlay) {
+        if (overlay != this.overlay) {
+            super.setOverlay(overlay);
+            this.broadcast(new PL_UpdateStyleBossEventPacket(this));
+        }
+    }
+
+    public PL_BossEvent setDarkenScreen(boolean flag) {
+        if (flag != this.darkenScreen) {
+            super.setDarkenScreen(flag);
+            this.broadcast(new PL_UpdatePropertiesBossEventPacket(this));
+        }
+        return this;
+    }
+
+    public PL_BossEvent setCreateWorldFog(boolean flag) {
+        if (flag != this.createWorldFog) {
+            super.setCreateWorldFog(flag);
+            this.broadcast(new PL_UpdatePropertiesBossEventPacket(this));
+        }
+        return this;
+    }
+    
+    public void setProgress(float f) {
+        if (f != this.progress) {
+            super.setProgress(f);
+            this.broadcast(new PL_UpdateProgressBossEventPacket(this));
+        }
+    }
+    
     public void addPlayer(ServerPlayer player) {
         if (this.players.add(player) && this.visible) {
-            player.connection.send(PL_BossEventPacket.createAddPacket(this));
+            PL_PacketRegistry.INSTANCE.sendTo(new PL_AddBossEventPacket(this), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
     public void removePlayer(ServerPlayer player) {
         if (this.players.remove(player) && this.visible) {
-            player.connection.send(PL_BossEventPacket.createRemovePacket(this.getId()));
+            PL_PacketRegistry.INSTANCE.sendTo(new PL_RemoveBossEventPacket(this), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
@@ -105,8 +103,11 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         if (newValue != this.visible) {
             this.visible = newValue;
 
-            for(ServerPlayer serverplayer : this.players) {
-                serverplayer.connection.send(newValue ? PL_BossEventPacket.createAddPacket(this) : PL_BossEventPacket.createRemovePacket(this.getId()));
+            for(ServerPlayer player : this.players) {
+                if (newValue) 
+                    PL_PacketRegistry.INSTANCE.sendTo(new PL_AddBossEventPacket(this), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+                else
+                    PL_PacketRegistry.INSTANCE.sendTo(new PL_RemoveBossEventPacket(this), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
             }
         }
     }

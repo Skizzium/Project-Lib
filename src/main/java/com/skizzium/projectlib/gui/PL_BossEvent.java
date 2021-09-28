@@ -2,7 +2,6 @@ package com.skizzium.projectlib.gui;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.BossEvent;
 
 import java.util.UUID;
 
