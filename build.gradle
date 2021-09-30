@@ -188,7 +188,7 @@ tasks.getByName("curseforge").doLast {
         embed.addField('Changelog', "Available at ${cf_page}/files/${file}", false)
         embed.addField('Download', "${cf_page}/download/${file}", false)
 
-        embed.setColor(0XB40A1A)
+        embed.setColor(0XFFFFFF)
         message.addEmbed(embed)
 
         webhook.sendMessage(message)
