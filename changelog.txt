@@ -1,0 +1,4 @@
+<p style="text-align:center">
+The library now fixes <a href="https://bugs.mojang.com/browse/MC-165036">MC-165036</a> for both custom and vanilla bars<br>
+Packets are now only a single class instead of multiple
+</p>

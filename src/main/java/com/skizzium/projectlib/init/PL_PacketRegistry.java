@@ -22,11 +22,6 @@ public class PL_PacketRegistry {
 
     @SubscribeEvent
     public static void registerMessages(FMLCommonSetupEvent event) {
-        INSTANCE.registerMessage(ID++, PL_AddBossEventPacket.class, PL_AddBossEventPacket::encode, PL_AddBossEventPacket::decode, PL_AddBossEventPacket::handle);
-        INSTANCE.registerMessage(ID++, PL_RemoveBossEventPacket.class, PL_RemoveBossEventPacket::encode, PL_RemoveBossEventPacket::decode, PL_RemoveBossEventPacket::handle);
-        INSTANCE.registerMessage(ID++, PL_UpdateNameBossEventPacket.class, PL_UpdateNameBossEventPacket::encode, PL_UpdateNameBossEventPacket::decode, PL_UpdateNameBossEventPacket::handle);
-        INSTANCE.registerMessage(ID++, PL_UpdateStyleBossEventPacket.class, PL_UpdateStyleBossEventPacket::encode, PL_UpdateStyleBossEventPacket::decode, PL_UpdateStyleBossEventPacket::handle);
-        INSTANCE.registerMessage(ID++, PL_UpdatePropertiesBossEventPacket.class, PL_UpdatePropertiesBossEventPacket::encode, PL_UpdatePropertiesBossEventPacket::decode, PL_UpdatePropertiesBossEventPacket::handle);
-        INSTANCE.registerMessage(ID++, PL_UpdateProgressBossEventPacket.class, PL_UpdateProgressBossEventPacket::encode, PL_UpdateProgressBossEventPacket::decode, PL_UpdateProgressBossEventPacket::handle);
+        INSTANCE.registerMessage(ID++, BossEventPacket.class, BossEventPacket::encode, BossEventPacket::decode, BossEventPacket::handle);
     }
 }
