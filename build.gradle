@@ -51,23 +51,23 @@ minecraft {
             parent(null, "client")
             args '--username', 'Dev2'
         }
-
-        server {
+        
+        data {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 skizzik {
                     source sourceSets.main
                 }
             }
         }
-
-        data {
+        
+        server {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 skizzik {
                     source sourceSets.main

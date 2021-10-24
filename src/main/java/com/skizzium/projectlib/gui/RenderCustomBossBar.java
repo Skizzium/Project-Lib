@@ -42,7 +42,7 @@ public class RenderCustomBossBar {
                 RenderSystem.setShaderTexture(0, PA_GUI_BARS_LOCATION);
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
-                drawBar(event.getMatrixStack(), k, j, lerpingEvent);
+                drawBar(event.getMatrixStack(), k, j, (PL_LerpingBossEvent) lerpingEvent);
                 RenderSystem.disableBlend();
             }
 
