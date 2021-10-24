@@ -1,5 +1,5 @@
 # Boss Utilities [Project Lib]
-[![CurseForge](http://cf.way2muchnoise.eu/versions/388172.svg)](https://www.curseforge.com/minecraft/mc-mods/bossutils)
+[![CurseForge](http://cf.way2muchnoise.eu/versions/bossutils.svg)](https://www.curseforge.com/minecraft/mc-mods/bossutils)
 [![Discord Server](https://img.shields.io/discord/591914197219016707.svg?color=7289da&label=Skizzium%20Server&logo=discord&style=flat-square)](https://discord.gg/5rjBEzT9Bm)
 [![Newest Version](https://img.shields.io/maven-metadata/v?label=Newest%20Version&metadataUrl=https%3A%2F%2Fraw.githubusercontent.com%2FSkizzium%2FProject-Lib%2Fmain%2Fmcmodsrepo%2Fcom%2Fskizzium%2Fprojectlib%2FBossUtilities-1.17.1%2Fmaven-metadata.xml)](https://github.com/Skizzium/Project-Lib/tree/main/mcmodsrepo/com/skizzium/projectlib/BossUtilities-1.17.1/)
 
