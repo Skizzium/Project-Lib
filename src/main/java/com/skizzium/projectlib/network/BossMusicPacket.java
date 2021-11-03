@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 public class BossMusicPacket {
     public final UUID eventID;
-    public final SoundEvent bossMusic;
+    public SoundEvent bossMusic = null;
     public final OperationType opeartion;
     
     /**
@@ -25,23 +25,29 @@ public class BossMusicPacket {
 
     public BossMusicPacket(FriendlyByteBuf buffer) {
         this.eventID = buffer.readUUID();
-        this.bossMusic = buffer.readRegistryId();
         this.opeartion = buffer.readEnum(OperationType.class);
         this.update = buffer.readBoolean();
+        if (!opeartion.equals(OperationType.STOP)) {
+            this.bossMusic = buffer.readRegistryId();
+        }
     }
 
     public BossMusicPacket(PL_BossEvent event, OperationType operation, boolean update) {
         this.eventID = event.getId();
-        this.bossMusic = event.getMusic();
         this.opeartion = operation;
         this.update = update;
+        if (!opeartion.equals(OperationType.STOP)) {
+            this.bossMusic = event.getMusic();
+        }
     }
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeUUID(eventID);
-        buffer.writeRegistryId(this.bossMusic);
         buffer.writeEnum(this.opeartion);
         buffer.writeBoolean(this.update);
+        if (!opeartion.equals(OperationType.STOP)) {
+            buffer.writeRegistryId(this.bossMusic);
+        }
     }
 
     public static BossMusicPacket decode(FriendlyByteBuf buffer) {

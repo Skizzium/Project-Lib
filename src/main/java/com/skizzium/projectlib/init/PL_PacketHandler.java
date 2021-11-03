@@ -31,7 +31,6 @@ public class PL_PacketHandler {
                     ((PL_LerpingBossEvent) bossEvent).music = new BossMusic(((PL_LerpingBossEvent) bossEvent).getEntity(), packet.bossMusic, Minecraft.getInstance());
                 }
     
-                // The update 
                 if (packet.update || !soundManager.isActive(((PL_LerpingBossEvent) bossEvent).music)) {
                     soundManager.play(((PL_LerpingBossEvent) bossEvent).music);
                 }

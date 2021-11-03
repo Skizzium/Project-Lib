@@ -89,7 +89,7 @@ public class ProjectLib {
         protected void customServerAiStep() {
             super.customServerAiStep();
             this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());
-            this.bossBar.setMusic(SoundEvents.MUSIC_DISC_MELLOHI);
+            this.bossBar.setMusic(null);
         }
     }
 }
