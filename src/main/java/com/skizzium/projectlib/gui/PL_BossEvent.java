@@ -2,24 +2,28 @@ package com.skizzium.projectlib.gui;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public abstract class PL_BossEvent {
     private final UUID id;
     protected Component name;
     protected float progress;
+    protected SoundEvent bossMusic;
     protected PL_BossBarColor color;
     protected PL_BossEvent.PL_BossBarOverlay overlay;
     protected boolean darkenScreen;
     protected boolean createWorldFog;
 
-    public PL_BossEvent(UUID uuid, Component displayName, PL_BossBarColor assignedColor, PL_BossEvent.PL_BossBarOverlay choosenOverlay) {
+    public PL_BossEvent(UUID uuid, Component displayName, @Nullable SoundEvent music, PL_BossBarColor assignedColor, PL_BossEvent.PL_BossBarOverlay choosenOverlay) {
         this.id = uuid;
         this.name = displayName;
+        this.progress = 1.0F;
+        this.bossMusic = music;
         this.color = assignedColor;
         this.overlay = choosenOverlay;
-        this.progress = 1.0F;
     }
 
     public UUID getId() {
@@ -40,6 +44,15 @@ public abstract class PL_BossEvent {
 
     public void setProgress(float newProgress) {
         this.progress = newProgress;
+    }
+
+    @Nullable
+    public SoundEvent getMusic() {
+        return this.bossMusic;
+    }
+
+    public void setMusic(@Nullable SoundEvent music) {
+        this.bossMusic = music;
     }
 
     public PL_BossBarColor getColor() {

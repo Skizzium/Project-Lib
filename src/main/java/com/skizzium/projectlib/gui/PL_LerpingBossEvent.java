@@ -1,14 +1,18 @@
 package com.skizzium.projectlib.gui;
 
 import net.minecraft.client.gui.components.LerpingBossEvent;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
 public class PL_LerpingBossEvent extends LerpingBossEvent {
+    public SoundInstance music;
     private PL_BossEvent.PL_BossBarColor customColor;
     private PL_BossEvent.PL_BossBarOverlay customOverlay;
 
@@ -17,7 +21,7 @@ public class PL_LerpingBossEvent extends LerpingBossEvent {
         this.customColor = color;
         this.customOverlay = overlay;
     }
-
+    
     public PL_BossEvent.PL_BossBarColor getCustomColor() {
         return this.customColor;
     }
