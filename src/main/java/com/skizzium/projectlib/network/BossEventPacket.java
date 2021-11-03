@@ -16,6 +16,7 @@ public class BossEventPacket {
     public final UUID id;
     public final Component name;
     public final float progress;
+    public final int entityId;
     public final PL_BossEvent.PL_BossBarColor color;
     public final PL_BossEvent.PL_BossBarOverlay overlay;
     public final boolean darkenScreen;
@@ -26,6 +27,7 @@ public class BossEventPacket {
         this.id = buffer.readUUID();
         this.name = buffer.readComponent();
         this.progress = buffer.readFloat();
+        this.entityId = buffer.readInt();
         this.color = buffer.readEnum(PL_BossEvent.PL_BossBarColor.class);
         this.overlay = buffer.readEnum(PL_BossEvent.PL_BossBarOverlay.class);
         int i = buffer.readUnsignedByte();
@@ -38,6 +40,7 @@ public class BossEventPacket {
         this.id = event.getId();
         this.name = event.getName();
         this.progress = event.getProgress();
+        this.entityId = event.getEntity().getId();
         this.color = event.getColor();
         this.overlay = event.getOverlay();
         this.darkenScreen = event.shouldDarkenScreen();
@@ -49,6 +52,7 @@ public class BossEventPacket {
         buffer.writeUUID(this.id);
         buffer.writeComponent(this.name);
         buffer.writeFloat(this.progress);
+        buffer.writeInt(this.entityId);
         buffer.writeEnum(this.color);
         buffer.writeEnum(this.overlay);
         buffer.writeByte(ProjectLib.encodeBossEventProperties(this.darkenScreen, this.createWorldFog));

@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
 
 import javax.annotation.Nullable;
@@ -21,14 +22,14 @@ public class PL_ServerBossEvent extends PL_BossEvent {
     private final Set<ServerPlayer> unmodifiablePlayers;
     private boolean visible;
 
-    public PL_ServerBossEvent(Component displayName, PL_BossBarColor color, PL_BossBarOverlay overlay) {
-        super(Mth.createInsecureUUID(), displayName, null, color, overlay);
+    public PL_ServerBossEvent(Entity entity, Component displayName, PL_BossBarColor color, PL_BossBarOverlay overlay) {
+        super(Mth.createInsecureUUID(), displayName, entity, null, color, overlay);
         this.unmodifiablePlayers = Collections.unmodifiableSet(this.players);
         this.visible = true;
     }
     
-    public PL_ServerBossEvent(Component displayName, SoundEvent music, PL_BossBarColor color, PL_BossBarOverlay overlay) {
-        super(Mth.createInsecureUUID(), displayName, music, color, overlay);
+    public PL_ServerBossEvent(Entity entity, Component displayName, SoundEvent music, PL_BossBarColor color, PL_BossBarOverlay overlay) {
+        super(Mth.createInsecureUUID(), displayName, entity, music, color, overlay);
         this.unmodifiablePlayers = Collections.unmodifiableSet(this.players);
         this.visible = true;
     }
@@ -40,9 +41,9 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         }
     }
 
-    public void setProgress(float f) {
-        if (f != this.progress) {
-            super.setProgress(f);
+    public void setProgress(float progress) {
+        if (progress != this.progress) {
+            super.setProgress(progress);
             this.broadcastUpdatePacket();
         }
     }
@@ -51,19 +52,20 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         if (music == null) {
             super.setMusic(null);
             for (ServerPlayer player : this.players) {
-                this.broadcastMusicPacket(BossMusicPacket.OperationType.STOP, player);
+                this.broadcastMusicPacket(false, BossMusicPacket.OperationType.STOP, player);
             }
         }
         else if (this.bossMusic == null) {
             super.setMusic(music);
             for (ServerPlayer player : this.players) {
-                this.broadcastMusicPacket(BossMusicPacket.OperationType.START, player);
+                this.broadcastMusicPacket(false, BossMusicPacket.OperationType.START, player);
             }
         }
         else if (music != this.bossMusic) {
             super.setMusic(music);
             for (ServerPlayer player : this.players) {
-                this.broadcastMusicPacket(BossMusicPacket.OperationType.UPDATE, player);
+                this.broadcastMusicPacket(true, BossMusicPacket.OperationType.STOP, player);
+                this.broadcastMusicPacket(true, BossMusicPacket.OperationType.START, player);
             }
         }
     }
@@ -102,14 +104,14 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         if (this.players.add(player) && this.visible) {
             this.broadcastAddRemovePacket(BossEventPacket.OperationType.ADD, player);
             if (this.bossMusic != null) {
-                this.broadcastMusicPacket(BossMusicPacket.OperationType.START, player);
+                this.broadcastMusicPacket(false, BossMusicPacket.OperationType.START, player);
             }
         }
     }
 
     public void removePlayer(ServerPlayer player) {
         if (this.players.remove(player) && this.visible) {
-            this.broadcastMusicPacket(BossMusicPacket.OperationType.STOP, player);
+            this.broadcastMusicPacket(false, BossMusicPacket.OperationType.STOP, player);
             this.broadcastAddRemovePacket(BossEventPacket.OperationType.REMOVE, player);
         }
     }
@@ -139,8 +141,8 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         return this.unmodifiablePlayers;
     }
 
-    private void broadcastMusicPacket(BossMusicPacket.OperationType operation, ServerPlayer player) {
-        PL_PacketRegistry.INSTANCE.sendTo(new BossMusicPacket(this, operation), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+    private void broadcastMusicPacket(boolean update, BossMusicPacket.OperationType operation, ServerPlayer player) {
+        PL_PacketRegistry.INSTANCE.sendTo(new BossMusicPacket(this, operation, update), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
     }
     
     private void broadcastAddRemovePacket(BossEventPacket.OperationType operation, ServerPlayer player) {

@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.Music;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraftforge.fml.common.Mod;
 
@@ -28,10 +28,11 @@ public class PL_PacketHandler {
                 Minecraft.getInstance().getMusicManager().stopPlaying();
     
                 if (((PL_LerpingBossEvent) bossEvent).music == null) {
-                    ((PL_LerpingBossEvent) bossEvent).music = new BossMusic(packet.bossMusic, Minecraft.getInstance());
+                    ((PL_LerpingBossEvent) bossEvent).music = new BossMusic(((PL_LerpingBossEvent) bossEvent).getEntity(), packet.bossMusic, Minecraft.getInstance());
                 }
     
-                if (!soundManager.isActive(((PL_LerpingBossEvent) bossEvent).music)) {
+                // The update 
+                if (packet.update || !soundManager.isActive(((PL_LerpingBossEvent) bossEvent).music)) {
                     soundManager.play(((PL_LerpingBossEvent) bossEvent).music);
                 }
             }
@@ -48,15 +49,12 @@ public class PL_PacketHandler {
                 musicManager.nextSongDelay = Math.min(100, Mth.nextInt(new Random(), music.getMinDelay(), music.getMaxDelay()));
             }
         }
-        else if (packet.opeartion.equals(BossMusicPacket.OperationType.UPDATE)) {
-            
-        }
     }
     
     public static void handleBossEventPacket(BossEventPacket packet) {
         if (packet.opeartion.equals(BossEventPacket.OperationType.ADD)) {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
-            vanillaEvents.put(packet.id, new PL_LerpingBossEvent(packet.id, packet.name, packet.progress, packet.color, packet.overlay, packet.darkenScreen, packet.createWorldFog));
+            vanillaEvents.put(packet.id, new PL_LerpingBossEvent(packet.id, packet.name, packet.progress, Minecraft.getInstance().level.getEntity(packet.entityId), packet.color, packet.overlay, packet.darkenScreen, packet.createWorldFog));
         }
         else if (packet.opeartion.equals(BossEventPacket.OperationType.REMOVE)) {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;

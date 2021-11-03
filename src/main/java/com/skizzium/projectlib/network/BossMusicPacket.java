@@ -15,23 +15,33 @@ public class BossMusicPacket {
     public final UUID eventID;
     public final SoundEvent bossMusic;
     public final OperationType opeartion;
+    
+    /**
+     * If true, the handler will ignore if the music is already playing.
+     * This is needed because the music doesn't stop in time for the next song to start, thus the handler
+     * doesn't start the next song to prevent overlapping which in this case is only fractions of a second.
+     */
+    public final boolean update;
 
     public BossMusicPacket(FriendlyByteBuf buffer) {
         this.eventID = buffer.readUUID();
         this.bossMusic = buffer.readRegistryId();
         this.opeartion = buffer.readEnum(OperationType.class);
+        this.update = buffer.readBoolean();
     }
 
-    public BossMusicPacket(PL_BossEvent event, OperationType operation) {
+    public BossMusicPacket(PL_BossEvent event, OperationType operation, boolean update) {
         this.eventID = event.getId();
         this.bossMusic = event.getMusic();
         this.opeartion = operation;
+        this.update = update;
     }
 
     public void encode(FriendlyByteBuf buffer) {
         buffer.writeUUID(eventID);
         buffer.writeRegistryId(this.bossMusic);
         buffer.writeEnum(this.opeartion);
+        buffer.writeBoolean(this.update);
     }
 
     public static BossMusicPacket decode(FriendlyByteBuf buffer) {
@@ -45,7 +55,6 @@ public class BossMusicPacket {
 
     public enum OperationType {
         START,
-        STOP,
-        UPDATE
+        STOP
     }
 }
