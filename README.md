@@ -7,4 +7,4 @@ As the name implies, this is a library providing a lot of boss utilities so deve
 
 This library is mainly utilized and developed for Skizzik & Co. but it will have some additional features that I might not need in that mod.
 
-All the information you'll need (including installation) can be found on the Wiki page.. For any other issues, please open a new issue in the Issues tab.
+All the information you'll need (including installation) can be found on the Wiki page. For any other issues, please open a new issue in the Issues tab.
