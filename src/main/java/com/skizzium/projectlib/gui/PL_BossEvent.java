@@ -22,24 +22,17 @@ public abstract class PL_BossEvent {
     protected boolean darkenScreen;
     protected boolean createWorldFog;
 
-    public PL_BossEvent(UUID uuid, Component displayName, Entity entity, SoundEvent music, int color, PL_BossEvent.PL_BossBarOverlay choosenOverlay) {
+    public PL_BossEvent(UUID uuid, Component displayName, Entity entity, BossEventProperties properties) {
         this.id = uuid;
         this.name = displayName;
         this.progress = 1.0F;
         this.entity = entity;
-        this.bossMusic = music;
-        this.customColor = color;
-        this.overlay = choosenOverlay;
-    }
-    
-    public PL_BossEvent(UUID uuid, Component displayName, Entity entity, @Nullable SoundEvent music, PL_BossBarColor assignedColor, PL_BossEvent.PL_BossBarOverlay choosenOverlay) {
-        this.id = uuid;
-        this.name = displayName;
-        this.progress = 1.0F;
-        this.entity = entity;
-        this.bossMusic = music;
-        this.color = assignedColor;
-        this.overlay = choosenOverlay;
+        this.bossMusic = properties.music;
+        this.customColor = properties.customColor;
+        this.color = properties.color;
+        this.overlay = properties.overlay;
+        this.darkenScreen = properties.darkenScreen;
+        this.createWorldFog = properties.createWorldFog;
     }
 
     public UUID getId() {
@@ -119,6 +112,48 @@ public abstract class PL_BossEvent {
         return this.createWorldFog;
     }
 
+    public static class BossEventProperties {
+        boolean darkenScreen;
+        boolean createWorldFog;
+        @Nullable
+        SoundEvent music;
+        @Nullable
+        Integer customColor;
+        @Nullable
+        PL_BossBarColor color;
+        PL_BossBarOverlay overlay = PL_BossBarOverlay.PROGRESS;
+
+        public BossEventProperties darkenScreen(boolean flag) {
+            this.darkenScreen = flag;
+            return this;
+        }
+
+        public BossEventProperties createWorldFog(boolean flag) {
+            this.createWorldFog = flag;
+            return this;
+        }
+        
+        public BossEventProperties music(@Nullable SoundEvent music) {
+            this.music = music;
+            return this;
+        }
+
+        public BossEventProperties customColor(@Nullable Integer customColor) {
+            this.customColor = customColor;
+            return this;
+        }
+
+        public BossEventProperties color(@Nullable PL_BossBarColor color) {
+            this.color = color;
+            return this;
+        }
+
+        public BossEventProperties overlay(PL_BossBarOverlay overlay) {
+            this.overlay = overlay;
+            return this;
+        }
+    }
+    
     public static enum PL_BossBarColor {
         RED("red",ChatFormatting.DARK_RED),
         ORANGE("orange", ChatFormatting.GOLD),
