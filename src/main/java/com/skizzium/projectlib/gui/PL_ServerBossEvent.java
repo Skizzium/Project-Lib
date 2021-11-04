@@ -22,10 +22,18 @@ public class PL_ServerBossEvent extends PL_BossEvent {
     private final Set<ServerPlayer> unmodifiablePlayers;
     private boolean visible;
 
-    public PL_ServerBossEvent(Entity entity, Component displayName, PL_BossBarColor color, PL_BossBarOverlay overlay) {
-        super(Mth.createInsecureUUID(), displayName, entity, null, color, overlay);
+    public PL_ServerBossEvent(Entity entity, Component displayName, int color, PL_BossBarOverlay overlay) {
+        this(entity, displayName, null, color, overlay);
+    }
+
+    public PL_ServerBossEvent(Entity entity, Component displayName, SoundEvent music, int color, PL_BossBarOverlay overlay) {
+        super(Mth.createInsecureUUID(), displayName, entity, music, color, overlay);
         this.unmodifiablePlayers = Collections.unmodifiableSet(this.players);
         this.visible = true;
+    }
+    
+    public PL_ServerBossEvent(Entity entity, Component displayName, PL_BossBarColor color, PL_BossBarOverlay overlay) {
+        this(entity, displayName, null, color, overlay);
     }
     
     public PL_ServerBossEvent(Entity entity, Component displayName, SoundEvent music, PL_BossBarColor color, PL_BossBarOverlay overlay) {
@@ -67,6 +75,13 @@ public class PL_ServerBossEvent extends PL_BossEvent {
                 this.broadcastMusicPacket(true, BossMusicPacket.OperationType.STOP, player);
                 this.broadcastMusicPacket(true, BossMusicPacket.OperationType.START, player);
             }
+        }
+    }
+
+    public void setColor(@Nullable Integer color) {
+        if (!java.util.Objects.equals(color, this.customColor)) {
+            super.setCustomColor(color);
+            this.broadcastUpdatePacket();
         }
     }
     

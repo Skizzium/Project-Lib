@@ -15,22 +15,34 @@ import java.util.UUID;
 @OnlyIn(Dist.CLIENT)
 public class PL_LerpingBossEvent extends LerpingBossEvent {
     public SoundInstance music;
+    private Integer customHexColor;
     private PL_BossEvent.PL_BossBarColor customColor;
     private PL_BossEvent.PL_BossBarOverlay customOverlay;
     private Entity entity;
 
-    public PL_LerpingBossEvent(UUID uuid, Component displayName, float progressPercentage, Entity entity, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
+    public PL_LerpingBossEvent(UUID uuid, Component displayName, float progressPercentage, Entity entity, @Nullable Integer customColor, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
         super(uuid, displayName, progressPercentage, BossBarColor.WHITE, BossBarOverlay.PROGRESS, darkenScreen, false, fog);
+        this.customHexColor = customColor;
         this.customColor = color;
         this.customOverlay = overlay;
         this.entity = entity;
     }
-    
+
+    @Nullable
+    public Integer getCustomHexColor() {
+        return this.customHexColor;
+    }
+
+    public void setCustomHexColor(@Nullable Integer color) {
+        this.customHexColor = color;
+    }
+
+    @Nullable
     public PL_BossEvent.PL_BossBarColor getCustomColor() {
         return this.customColor;
     }
 
-    public void setCustomColor(PL_BossEvent.PL_BossBarColor newColor) {
+    public void setCustomColor(@Nullable PL_BossEvent.PL_BossBarColor newColor) {
         this.customColor = newColor;
     }
     

@@ -9,6 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -17,6 +18,9 @@ public class BossEventPacket {
     public final Component name;
     public final float progress;
     public final int entityId;
+    @Nullable
+    public final Integer customColor;
+    @Nullable
     public final PL_BossEvent.PL_BossBarColor color;
     public final PL_BossEvent.PL_BossBarOverlay overlay;
     public final boolean darkenScreen;
@@ -28,6 +32,13 @@ public class BossEventPacket {
         this.name = buffer.readComponent();
         this.progress = buffer.readFloat();
         this.entityId = buffer.readInt();
+        int customColor = buffer.readInt();
+        if (customColor != 0) {
+            this.customColor = customColor;
+        }
+        else {
+            this.customColor = null;
+        }
         this.color = buffer.readEnum(PL_BossEvent.PL_BossBarColor.class);
         this.overlay = buffer.readEnum(PL_BossEvent.PL_BossBarOverlay.class);
         int i = buffer.readUnsignedByte();
@@ -41,6 +52,7 @@ public class BossEventPacket {
         this.name = event.getName();
         this.progress = event.getProgress();
         this.entityId = event.getEntity().getId();
+        this.customColor = event.getCustomColor();
         this.color = event.getColor();
         this.overlay = event.getOverlay();
         this.darkenScreen = event.shouldDarkenScreen();
@@ -53,7 +65,8 @@ public class BossEventPacket {
         buffer.writeComponent(this.name);
         buffer.writeFloat(this.progress);
         buffer.writeInt(this.entityId);
-        buffer.writeEnum(this.color);
+        buffer.writeInt(this.customColor == null ? 0 : this.customColor);
+        buffer.writeEnum(this.color == null ? PL_BossEvent.PL_BossBarColor.WHITE : this.color);
         buffer.writeEnum(this.overlay);
         buffer.writeByte(ProjectLib.encodeBossEventProperties(this.darkenScreen, this.createWorldFog));
         buffer.writeEnum(this.opeartion);

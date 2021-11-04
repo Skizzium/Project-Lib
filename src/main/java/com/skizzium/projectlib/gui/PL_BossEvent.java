@@ -14,11 +14,24 @@ public abstract class PL_BossEvent {
     protected float progress;
     protected Entity entity;
     protected SoundEvent bossMusic;
+    @Nullable
+    protected Integer customColor;
+    @Nullable
     protected PL_BossBarColor color;
     protected PL_BossEvent.PL_BossBarOverlay overlay;
     protected boolean darkenScreen;
     protected boolean createWorldFog;
 
+    public PL_BossEvent(UUID uuid, Component displayName, Entity entity, SoundEvent music, int color, PL_BossEvent.PL_BossBarOverlay choosenOverlay) {
+        this.id = uuid;
+        this.name = displayName;
+        this.progress = 1.0F;
+        this.entity = entity;
+        this.bossMusic = music;
+        this.customColor = color;
+        this.overlay = choosenOverlay;
+    }
+    
     public PL_BossEvent(UUID uuid, Component displayName, Entity entity, @Nullable SoundEvent music, PL_BossBarColor assignedColor, PL_BossEvent.PL_BossBarOverlay choosenOverlay) {
         this.id = uuid;
         this.name = displayName;
@@ -62,11 +75,21 @@ public abstract class PL_BossEvent {
         this.bossMusic = music;
     }
 
+    @Nullable
+    public Integer getCustomColor() {
+        return this.customColor;
+    }
+
+    public void setCustomColor(@Nullable Integer color) {
+        this.customColor = color;
+    }
+
+    @Nullable
     public PL_BossBarColor getColor() {
         return this.color;
     }
 
-    public void setColor(PL_BossBarColor newColor) {
+    public void setColor(@Nullable PL_BossBarColor newColor) {
         this.color = newColor;
     }
 

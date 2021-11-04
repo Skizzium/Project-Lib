@@ -53,7 +53,7 @@ public class PL_PacketHandler {
     public static void handleBossEventPacket(BossEventPacket packet) {
         if (packet.opeartion.equals(BossEventPacket.OperationType.ADD)) {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
-            vanillaEvents.put(packet.id, new PL_LerpingBossEvent(packet.id, packet.name, packet.progress, Minecraft.getInstance().level.getEntity(packet.entityId), packet.color, packet.overlay, packet.darkenScreen, packet.createWorldFog));
+            vanillaEvents.put(packet.id, new PL_LerpingBossEvent(packet.id, packet.name, packet.progress, Minecraft.getInstance().level.getEntity(packet.entityId), packet.customColor, packet.color, packet.overlay, packet.darkenScreen, packet.createWorldFog));
         }
         else if (packet.opeartion.equals(BossEventPacket.OperationType.REMOVE)) {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
