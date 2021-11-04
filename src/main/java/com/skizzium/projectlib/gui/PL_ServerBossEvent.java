@@ -78,7 +78,7 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         }
     }
 
-    public void setColor(@Nullable Integer color) {
+    public void setCustomColor(@Nullable Integer color) {
         if (!java.util.Objects.equals(color, this.customColor)) {
             super.setCustomColor(color);
             this.broadcastUpdatePacket();
