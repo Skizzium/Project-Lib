@@ -67,7 +67,7 @@ public class ProjectLib {
     }
 
     private static class TestBoss extends Pig {
-        private final PL_ServerBossEvent bossBar = new PL_ServerBossEvent(this, this.getDisplayName(), SoundEvents.MUSIC_DISC_PIGSTEP, 0xFFC0CB, PL_BossEvent.PL_BossBarOverlay.PROGRESS);
+        private final PL_ServerBossEvent bossBar = new PL_ServerBossEvent(this, this.getDisplayName(), SoundEvents.MUSIC_DISC_PIGSTEP, 0xFFC0CB, PL_BossEvent.PL_BossBarOverlay.NOTCHED_5);
 
         public TestBoss(EntityType<? extends Pig> p_29462_, Level p_29463_) {
             super(p_29462_, p_29463_);

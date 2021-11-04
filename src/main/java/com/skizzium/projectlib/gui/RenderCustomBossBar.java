@@ -77,8 +77,38 @@ public class RenderCustomBossBar {
             }
         }
     }
+    
+    private static void drawBar(PoseStack pose, int xPos, int yPos, BossEvent bossEvent) {
+        GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2), 182, 5, 256, 256);
+        if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
+            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
+        }
 
-    public static void blit(PoseStack pMatrixStack, int pX, int pY, int pBlitOffset, float pUOffset, float pVOffset, int pUWidth, int pVHeight, int pTextureHeight, int pTextureWidth, int color) {
+        int i = (int)(bossEvent.getProgress() * 183.0F);
+        if (i > 0) {
+            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2 + 5), i, 5, 256, 256);
+            if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
+                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 256);
+            }
+        }
+    }
+    
+    private static void drawBar(PoseStack pose, int xPos, int yPos, PL_LerpingBossEvent bossEvent) {
+        GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getCustomColor().ordinal() * 5 * 2), 182, 5, 256, 256);
+        if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
+            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
+        }
+
+        int i = (int)(bossEvent.getProgress() * 183.0F);
+        if (i > 0) {
+            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i, 5, 256, 256);
+            if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
+                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 256);
+            }
+        }
+    }
+
+    private static void blit(PoseStack pMatrixStack, int pX, int pY, int pBlitOffset, float pUOffset, float pVOffset, int pUWidth, int pVHeight, int pTextureHeight, int pTextureWidth, int color) {
         innerBlit(pMatrixStack, pX, pX + pUWidth, pY, pY + pVHeight, pBlitOffset, pUWidth, pVHeight, pUOffset, pVOffset, pTextureWidth, pTextureHeight, color);
     }
 
@@ -97,48 +127,21 @@ public class RenderCustomBossBar {
         bufferbuilder.end();
         BufferUploader.end(bufferbuilder);
     }
-    
+
     private static void drawCustomColoredBar(PoseStack pose, int xPos, int yPos, int color, PL_LerpingBossEvent bossEvent) {
-        RenderCustomBossBar.blit(pose, xPos, yPos, 0, 0.0F, 0.0F, 182, 5, 128, 10, color);
-//        if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
-//            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
-//        }
-
-//        int i2 = (int)(bossEvent.getProgress() * 183.0F);
-//        if (i2 > 0) {
-//            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i2, 5, 256, 256);
-//            if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
-//                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i2, 5, 256, 256);
-//            }
-//        }
-    }
-    
-    private static void drawBar(PoseStack pose, int xPos, int yPos, BossEvent bossEvent) {
-        GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2), 182, 5, 256, 256);
-        if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
-        }
-
-        int i2 = (int)(bossEvent.getProgress() * 183.0F);
-        if (i2 > 0) {
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2 + 5), i2, 5, 256, 256);
-            if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2 + 5), i2, 5, 256, 256);
-            }
-        }
-    }
-    
-    private static void drawBar(PoseStack pose, int xPos, int yPos, PL_LerpingBossEvent bossEvent) {
-        GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getCustomColor().ordinal() * 5 * 2), 182, 5, 256, 256);
+        RenderCustomBossBar.blit(pose, xPos, yPos, 0, 0.0F, 0.0F, 182, 5, 10, 182, color);
         if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
+            RenderSystem.setShaderTexture(0, PL_GUI_BARS_LOCATION);
             GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
+            RenderSystem.setShaderTexture(0, TEMPLATE_BAR_LOCATION);
         }
 
-        int i2 = (int)(bossEvent.getProgress() * 183.0F);
-        if (i2 > 0) {
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i2, 5, 256, 256);
+        int i = (int)(bossEvent.getProgress() * 183.0F);
+        if (i > 0) {
+            RenderCustomBossBar.blit(pose, xPos, yPos, 0, 0.0F, 5.0F, i, 5, 10, 182, color);
             if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
-                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i2, 5, 256, 256);
+                RenderSystem.setShaderTexture(0, PL_GUI_BARS_LOCATION);
+                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 256);
             }
         }
     }
