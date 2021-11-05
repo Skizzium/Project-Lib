@@ -1,10 +1,6 @@
 package com.skizzium.projectlib;
 
-import com.skizzium.projectlib.gui.PL_BossEvent;
-import com.skizzium.projectlib.gui.PL_LerpingBossEvent;
-import com.skizzium.projectlib.gui.PL_ServerBossEvent;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.LerpingBossEvent;
+import com.skizzium.projectlib.gui.*;
 import net.minecraft.client.renderer.entity.PigRenderer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -67,10 +63,18 @@ public class ProjectLib {
     }
 
     private static class TestBoss extends Pig {
+        private final ServerMinibar[] minibars = {new ServerMinibar(this, new Minibar.MinibarProperties().color(0x0FF1CE)),
+                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.RED)),
+                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(0x420420)),
+                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.PURPLE)),
+                                            new ServerMinibar(this, new Minibar.MinibarProperties())};
         private final PL_ServerBossEvent bossBar = new PL_ServerBossEvent(this, this.getDisplayName(), new PL_BossEvent.BossEventProperties().music(SoundEvents.MUSIC_DISC_PIGSTEP).customColor(0xFFC0CB).overlay(PL_BossEvent.PL_BossBarOverlay.NOTCHED_5));
 
-        public TestBoss(EntityType<? extends Pig> p_29462_, Level p_29463_) {
-            super(p_29462_, p_29463_);
+        public TestBoss(EntityType<? extends Pig> type, Level world) {
+            super(type, world);
+            for (ServerMinibar minibar : minibars) {
+                bossBar.addMinibar(minibar);
+            }
         }
 
         @Override
@@ -89,6 +93,7 @@ public class ProjectLib {
         protected void customServerAiStep() {
             super.customServerAiStep();
             this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());
+            this.bossBar.getMinibars().forEach((bar) -> bar.setProgress(this.getHealth() / this.getMaxHealth()));
         }
     }
 }

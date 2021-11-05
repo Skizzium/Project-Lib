@@ -1,6 +1,7 @@
 package com.skizzium.projectlib.init;
 
 import com.skizzium.projectlib.ProjectLib;
+import com.skizzium.projectlib.gui.LerpingMinibar;
 import com.skizzium.projectlib.gui.PL_LerpingBossEvent;
 import com.skizzium.projectlib.network.*;
 import com.skizzium.projectlib.sound.BossMusic;
@@ -19,6 +20,25 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = ProjectLib.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PL_PacketHandler {
+    public static void handleMinibarPacket(MinibarPacket packet) {
+        if (packet.opeartion.equals(BossEventPacket.OperationType.ADD)) {
+            Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
+            vanillaEvents.put(packet.id, new LerpingMinibar(packet.id, packet.progress, Minecraft.getInstance().level.getEntity(packet.entityId), packet.customColor, packet.color));
+        }
+        else if (packet.opeartion.equals(BossEventPacket.OperationType.REMOVE)) {
+            Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
+            vanillaEvents.remove(packet.id);
+        }
+        else if (packet.opeartion.equals(BossEventPacket.OperationType.UPDATE)) {
+            Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
+            LerpingMinibar lerpingBossEvent = (LerpingMinibar)vanillaEvents.get(packet.id);
+
+            lerpingBossEvent.setProgress(packet.progress);
+            lerpingBossEvent.setCustomHexColor(packet.customColor);
+            lerpingBossEvent.setCustomColor(packet.color);
+        }
+    }
+    
     public static void handleBossMusicPacket(BossMusicPacket packet) {
         if (packet.opeartion.equals(BossMusicPacket.OperationType.START)) {
             LerpingBossEvent bossEvent = Minecraft.getInstance().gui.getBossOverlay().events.get(packet.eventID);
@@ -53,7 +73,7 @@ public class PL_PacketHandler {
     public static void handleBossEventPacket(BossEventPacket packet) {
         if (packet.opeartion.equals(BossEventPacket.OperationType.ADD)) {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
-            vanillaEvents.put(packet.id, new PL_LerpingBossEvent(packet.id, packet.name, packet.progress, Minecraft.getInstance().level.getEntity(packet.entityId), packet.customColor, packet.color, packet.overlay, packet.darkenScreen, packet.createWorldFog));
+            vanillaEvents.put(packet.id, new PL_LerpingBossEvent(packet.id, packet.name, packet.progress, Minecraft.getInstance().level.getEntity(packet.entityId), packet.minibars, packet.customColor, packet.color, packet.overlay, packet.darkenScreen, packet.createWorldFog));
         }
         else if (packet.opeartion.equals(BossEventPacket.OperationType.REMOVE)) {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
@@ -63,9 +83,11 @@ public class PL_PacketHandler {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
             PL_LerpingBossEvent lerpingBossEvent = (PL_LerpingBossEvent)vanillaEvents.get(packet.id);
 
-            vanillaEvents.get(packet.id).setName(packet.name);
-            vanillaEvents.get(packet.id).setProgress(packet.progress);
-
+            lerpingBossEvent.setName(packet.name);
+            lerpingBossEvent.setProgress(packet.progress);
+            lerpingBossEvent.setMinibars(packet.minibars);
+            
+            lerpingBossEvent.setCustomHexColor(packet.customColor);
             lerpingBossEvent.setCustomColor(packet.color);
             lerpingBossEvent.setCustomOverlay(packet.overlay);
 

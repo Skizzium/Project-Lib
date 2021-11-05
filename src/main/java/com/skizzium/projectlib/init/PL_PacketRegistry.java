@@ -22,6 +22,7 @@ public class PL_PacketRegistry {
 
     @SubscribeEvent
     public static void registerMessages(FMLCommonSetupEvent event) {
+        INSTANCE.registerMessage(ID++, MinibarPacket.class, MinibarPacket::encode, MinibarPacket::decode, MinibarPacket::handle);
         INSTANCE.registerMessage(ID++, BossEventPacket.class, BossEventPacket::encode, BossEventPacket::decode, BossEventPacket::handle);
         INSTANCE.registerMessage(ID++, BossMusicPacket.class, BossMusicPacket::encode, BossMusicPacket::decode, BossMusicPacket::handle);
     }

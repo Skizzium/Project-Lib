@@ -13,9 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 
 public class PL_ServerBossEvent extends PL_BossEvent {
     private final Set<ServerPlayer> players = Sets.newHashSet();
@@ -38,6 +36,20 @@ public class PL_ServerBossEvent extends PL_BossEvent {
     public void setProgress(float progress) {
         if (progress != this.progress) {
             super.setProgress(progress);
+            this.broadcastUpdatePacket();
+        }
+    }
+
+    public void addMinibar(ServerMinibar minibar) {
+        if (!this.minibars.contains(minibar)) {
+            super.addMinibar(minibar);
+            this.broadcastUpdatePacket();
+        }
+    }
+    
+    public void setMinibars(ArrayList<ServerMinibar> minibars) {
+        if (minibars != this.minibars) {
+            super.setMinibars(minibars);
             this.broadcastUpdatePacket();
         }
     }
@@ -103,6 +115,10 @@ public class PL_ServerBossEvent extends PL_BossEvent {
 
     public void addPlayer(ServerPlayer player) {
         if (this.players.add(player) && this.visible) {
+            for (ServerMinibar minibar : this.minibars) {
+                minibar.addPlayer(player);
+            }
+            
             this.broadcastAddRemovePacket(BossEventPacket.OperationType.ADD, player);
             if (this.bossMusic != null) {
                 this.broadcastMusicPacket(false, BossMusicPacket.OperationType.START, player);
@@ -112,6 +128,10 @@ public class PL_ServerBossEvent extends PL_BossEvent {
 
     public void removePlayer(ServerPlayer player) {
         if (this.players.remove(player) && this.visible) {
+            for (ServerMinibar minibar : this.minibars) {
+                minibar.removePlayer(player);
+            }
+            
             this.broadcastMusicPacket(false, BossMusicPacket.OperationType.STOP, player);
             this.broadcastAddRemovePacket(BossEventPacket.OperationType.REMOVE, player);
         }
@@ -133,6 +153,9 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         if (newValue != this.visible) {
             this.visible = newValue;
             for (ServerPlayer player : this.players) {
+                for (ServerMinibar minibar : this.minibars) {
+                    minibar.setVisible(visible);
+                }
                 this.broadcastAddRemovePacket(newValue ? BossEventPacket.OperationType.ADD : BossEventPacket.OperationType.REMOVE, player);
             }
         }

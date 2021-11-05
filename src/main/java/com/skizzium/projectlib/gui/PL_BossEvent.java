@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class PL_BossEvent {
@@ -13,6 +14,7 @@ public abstract class PL_BossEvent {
     protected Component name;
     protected float progress;
     protected Entity entity;
+    protected ArrayList<ServerMinibar> minibars;
     protected SoundEvent bossMusic;
     @Nullable
     protected Integer customColor;
@@ -27,6 +29,7 @@ public abstract class PL_BossEvent {
         this.name = displayName;
         this.progress = 1.0F;
         this.entity = entity;
+        this.minibars = properties.minibars;
         this.bossMusic = properties.music;
         this.customColor = properties.customColor;
         this.color = properties.color;
@@ -57,6 +60,18 @@ public abstract class PL_BossEvent {
 
     public Entity getEntity() {
         return this.entity;
+    }
+
+    public ArrayList<ServerMinibar> getMinibars() {
+        return this.minibars;
+    }
+
+    public void addMinibar(ServerMinibar minibar) {
+        this.minibars.add(minibar);
+    }
+    
+    public void setMinibars(ArrayList<ServerMinibar> minibars) {
+        this.minibars = minibars;
     }
 
     @Nullable
@@ -115,6 +130,7 @@ public abstract class PL_BossEvent {
     public static class BossEventProperties {
         boolean darkenScreen;
         boolean createWorldFog;
+        ArrayList<ServerMinibar> minibars = new ArrayList<>();
         @Nullable
         SoundEvent music;
         @Nullable
@@ -123,6 +139,11 @@ public abstract class PL_BossEvent {
         PL_BossBarColor color;
         PL_BossBarOverlay overlay = PL_BossBarOverlay.PROGRESS;
 
+        public BossEventProperties addMinibar(ServerMinibar minibar) {
+            this.minibars.add(minibar);
+            return this;
+        }
+        
         public BossEventProperties darkenScreen(boolean flag) {
             this.darkenScreen = flag;
             return this;

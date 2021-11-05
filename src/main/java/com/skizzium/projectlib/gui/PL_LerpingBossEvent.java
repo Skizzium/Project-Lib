@@ -1,33 +1,54 @@
 package com.skizzium.projectlib.gui;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
 public class PL_LerpingBossEvent extends LerpingBossEvent {
+    private Entity entity;
+    private ArrayList<LerpingMinibar> minibars = new ArrayList<>();
     public SoundInstance music;
     private Integer customHexColor;
     private PL_BossEvent.PL_BossBarColor customColor;
     private PL_BossEvent.PL_BossBarOverlay customOverlay;
-    private Entity entity;
+    
+    public int xPos;
+    public int yPos;
 
-    public PL_LerpingBossEvent(UUID uuid, Component displayName, float progressPercentage, Entity entity, @Nullable Integer customColor, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
+    public PL_LerpingBossEvent(UUID uuid, Component displayName, float progressPercentage, Entity entity, ArrayList<UUID> minibars, @Nullable Integer customColor, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
         super(uuid, displayName, progressPercentage, BossBarColor.WHITE, BossBarOverlay.PROGRESS, darkenScreen, false, fog);
+        this.entity = entity;
+        for (UUID id : minibars) {
+            this.minibars.add((LerpingMinibar) Minecraft.getInstance().gui.getBossOverlay().events.get(id));
+        }
         this.customHexColor = customColor;
         this.customColor = color;
         this.customOverlay = overlay;
-        this.entity = entity;
     }
 
+    public Entity getEntity() {
+        return this.entity;
+    }
+    
+    public ArrayList<LerpingMinibar> getMinibars() {
+        return this.minibars;
+    }
+
+    public void setMinibars(ArrayList<UUID> minibars) {
+        for (UUID id : minibars) {
+            this.minibars.add((LerpingMinibar) Minecraft.getInstance().gui.getBossOverlay().events.get(id));
+        }
+    }
+    
     @Nullable
     public Integer getCustomHexColor() {
         return this.customHexColor;
@@ -52,13 +73,5 @@ public class PL_LerpingBossEvent extends LerpingBossEvent {
     
     public void setCustomOverlay(PL_BossEvent.PL_BossBarOverlay newOverlay) {
         this.customOverlay = newOverlay;
-    }
-
-    public Entity getEntity() {
-        return this.entity;
-    }
-
-    public void setEntity(Entity entity) {
-        this.entity = entity;
     }
 }
