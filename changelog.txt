@@ -1,6 +1,3 @@
 <p style="text-align:center">
-- Switch to using BossEventProperties
-- Add "Multi-Bar" - Multi-Bar is a Boss Bar for bosses built with different parts.
-It displays your boss's main health on the top and the additional healths on the bottom.
-This was mainly made for the Friendly Skizzik who's heads have separate healths.
+- Multi-Bars can now have between 0 and 7 Mini-Bars
 </p>
