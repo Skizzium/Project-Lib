@@ -61,7 +61,6 @@ public abstract class Minibar {
         Integer customColor;
         @Nullable
         PL_BossEvent.PL_BossBarColor color;
-        PL_BossEvent.PL_BossBarOverlay overlay = PL_BossEvent.PL_BossBarOverlay.PROGRESS;
 
         public MinibarProperties color(@Nullable Integer customColor) {
             this.customColor = customColor;
@@ -70,11 +69,6 @@ public abstract class Minibar {
 
         public MinibarProperties color(@Nullable PL_BossEvent.PL_BossBarColor color) {
             this.color = color;
-            return this;
-        }
-
-        public MinibarProperties overlay(PL_BossEvent.PL_BossBarOverlay overlay) {
-            this.overlay = overlay;
             return this;
         }
     }
