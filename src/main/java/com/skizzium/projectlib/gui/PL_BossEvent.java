@@ -1,5 +1,6 @@
 package com.skizzium.projectlib.gui;
 
+import com.skizzium.projectlib.gui.minibar.ServerMinibar;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;

@@ -1,7 +1,8 @@
-package com.skizzium.projectlib.gui;
+package com.skizzium.projectlib.gui.minibar;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.skizzium.projectlib.gui.PL_BossEvent;
 import com.skizzium.projectlib.init.PL_PacketRegistry;
 import com.skizzium.projectlib.network.BossEventPacket;
 import com.skizzium.projectlib.network.MinibarPacket;

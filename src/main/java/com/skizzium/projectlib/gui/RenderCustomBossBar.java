@@ -2,6 +2,8 @@ package com.skizzium.projectlib.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.skizzium.projectlib.ProjectLib;
+import com.skizzium.projectlib.gui.minibar.LerpingMinibar;
+import com.skizzium.projectlib.gui.minibar.MinibarRendering;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.Component;

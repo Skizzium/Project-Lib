@@ -1,5 +1,6 @@
-package com.skizzium.projectlib.gui;
+package com.skizzium.projectlib.gui.minibar;
 
+import com.skizzium.projectlib.gui.PL_BossEvent;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;

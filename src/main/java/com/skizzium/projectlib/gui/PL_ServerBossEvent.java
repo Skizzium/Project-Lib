@@ -3,6 +3,7 @@ package com.skizzium.projectlib.gui;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.skizzium.projectlib.gui.minibar.ServerMinibar;
 import com.skizzium.projectlib.init.PL_PacketRegistry;
 import com.skizzium.projectlib.network.*;
 import net.minecraft.network.chat.Component;

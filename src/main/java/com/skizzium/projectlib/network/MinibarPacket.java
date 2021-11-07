@@ -1,6 +1,6 @@
 package com.skizzium.projectlib.network;
 
-import com.skizzium.projectlib.gui.Minibar;
+import com.skizzium.projectlib.gui.minibar.Minibar;
 import com.skizzium.projectlib.gui.PL_BossEvent;
 import com.skizzium.projectlib.init.PL_PacketHandler;
 import net.minecraft.network.FriendlyByteBuf;

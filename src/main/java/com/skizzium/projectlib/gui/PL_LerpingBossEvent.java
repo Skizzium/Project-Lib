@@ -1,5 +1,6 @@
 package com.skizzium.projectlib.gui;
 
+import com.skizzium.projectlib.gui.minibar.LerpingMinibar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.resources.sounds.SoundInstance;

@@ -1,7 +1,7 @@
 package com.skizzium.projectlib.init;
 
 import com.skizzium.projectlib.ProjectLib;
-import com.skizzium.projectlib.gui.LerpingMinibar;
+import com.skizzium.projectlib.gui.minibar.LerpingMinibar;
 import com.skizzium.projectlib.gui.PL_LerpingBossEvent;
 import com.skizzium.projectlib.network.*;
 import com.skizzium.projectlib.sound.BossMusic;
