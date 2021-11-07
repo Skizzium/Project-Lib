@@ -64,10 +64,10 @@ public class ProjectLib {
 
     private static class TestBoss extends Pig {
         private final ServerMinibar[] minibars = {new ServerMinibar(this, new Minibar.MinibarProperties().color(0x0FF1CE)),
-                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.RED)),
-                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(0x420420)),
-                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.PURPLE)),
-                                            new ServerMinibar(this, new Minibar.MinibarProperties())};
+                                            //new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.RED)),
+                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(0xFF0000)),
+                                            //new ServerMinibar(this, new Minibar.MinibarProperties().color(0xE42AAA)),
+                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(0xFFFFFF))};
         private final PL_ServerBossEvent bossBar = new PL_ServerBossEvent(this, this.getDisplayName(), new PL_BossEvent.BossEventProperties().music(SoundEvents.MUSIC_DISC_PIGSTEP).customColor(0xFFC0CB).overlay(PL_BossEvent.PL_BossBarOverlay.NOTCHED_5));
 
         public TestBoss(EntityType<? extends Pig> type, Level world) {
