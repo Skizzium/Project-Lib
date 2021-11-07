@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = ProjectLib.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class RenderCustomBossBar {
+public class RenderBars {
     private static final ResourceLocation VANILLA_BARS_LOCATION = new ResourceLocation("textures/gui/bars.png");
     private static final ResourceLocation PL_BARS_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/pl_bars.png");
     private static final ResourceLocation TEMPLATE_BAR_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/template_bar.png");
@@ -57,7 +57,7 @@ public class RenderCustomBossBar {
                     RenderSystem.setShaderTexture(0, TEMPLATE_BAR_LOCATION);
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
-                    BarRendering.drawCustomColoredBar(event.getMatrixStack(), k, j, ((PL_LerpingBossEvent) lerpingEvent).getCustomHexColor(), (PL_LerpingBossEvent) lerpingEvent);
+                    BarRendering.drawBar(event.getMatrixStack(), k, j, ((PL_LerpingBossEvent) lerpingEvent).getCustomHexColor(), (PL_LerpingBossEvent) lerpingEvent);
                 }
                 else {
                     if (((PL_LerpingBossEvent) lerpingEvent).getCustomColor() != null) {
@@ -68,7 +68,7 @@ public class RenderCustomBossBar {
                     }
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
-                    BarRendering.drawBar(event.getMatrixStack(), k, j, (PL_LerpingBossEvent) lerpingEvent);
+                    BarRendering.drawBar(event.getMatrixStack(), k, j, null, (PL_LerpingBossEvent) lerpingEvent);
                 }
                 RenderSystem.disableBlend();
             }

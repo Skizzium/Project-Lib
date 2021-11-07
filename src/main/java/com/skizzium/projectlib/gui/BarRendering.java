@@ -13,42 +13,14 @@ import net.minecraft.world.BossEvent;
 public class BarRendering {
     private static final ResourceLocation PL_BARS_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/pl_bars.png");
     private static final ResourceLocation TEMPLATE_BAR_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/template_bar.png");
-    
-    public static void drawBar(PoseStack pose, int xPos, int yPos, BossEvent bossEvent) {
-        GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2), 182, 5, 256, 256);
-        if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
-        }
 
-        int i = (int)(bossEvent.getProgress() * 183.0F);
-        if (i > 0) {
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2 + 5), i, 5, 256, 256);
-            if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
-                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 256);
-            }
+    public static void blit(PoseStack matrix, int x, int y, int blitOffset, float uOffset, float vOffset, int uWidth, int vHeight, int textureHeight, int textureWidth, Integer color) {
+        if (color == null) {
+            GuiComponent.blit(matrix, x, y, blitOffset, uOffset, vOffset, uWidth, vHeight, textureHeight, textureWidth);
         }
-    }
-
-    public static void drawBar(PoseStack pose, int xPos, int yPos, PL_LerpingBossEvent bossEvent) {
-        bossEvent.xPos = xPos;
-        bossEvent.yPos = yPos;
-        
-        GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getCustomColor().ordinal() * 5 * 2), 182, 5, 256, 300);
-        if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 300);
+        else {
+            innerBlit(matrix, x, x + uWidth, y, y + vHeight, blitOffset, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight, color);
         }
-
-        int i = (int)(bossEvent.getProgress() * 183.0F);
-        if (i > 0) {
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i, 5, 256, 300);
-            if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
-                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 300);
-            }
-        }
-    }
-
-    public static void blit(PoseStack pMatrixStack, int pX, int pY, int pBlitOffset, float pUOffset, float pVOffset, int pUWidth, int pVHeight, int pTextureHeight, int pTextureWidth, int color) {
-        innerBlit(pMatrixStack, pX, pX + pUWidth, pY, pY + pVHeight, pBlitOffset, pUWidth, pVHeight, pUOffset, pVOffset, pTextureWidth, pTextureHeight, color);
     }
 
     private static void innerBlit(PoseStack pMatrixStack, int pX1, int pX2, int pY1, int pY2, int pBlitOffset, int pUWidth, int pVHeight, float pUOffset, float pVOffset, int pTextureWidth, int pTextureHeight, int color) {
@@ -67,11 +39,26 @@ public class BarRendering {
         BufferUploader.end(bufferbuilder);
     }
 
-    public static void drawCustomColoredBar(PoseStack pose, int xPos, int yPos, int color, PL_LerpingBossEvent bossEvent) {
+    public static void drawBar(PoseStack pose, int xPos, int yPos, BossEvent bossEvent) {
+        GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2), 182, 5, 256, 256);
+        if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
+            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
+        }
+
+        int i = (int)(bossEvent.getProgress() * 183.0F);
+        if (i > 0) {
+            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(bossEvent.getColor().ordinal() * 5 * 2 + 5), i, 5, 256, 256);
+            if (bossEvent.getOverlay() != BossEvent.BossBarOverlay.PROGRESS) {
+                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(80 + (bossEvent.getOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 256);
+            }
+        }
+    }
+    
+    public static void drawBar(PoseStack pose, int xPos, int yPos, Integer color, PL_LerpingBossEvent bossEvent) {
         bossEvent.xPos = xPos;
         bossEvent.yPos = yPos;
         
-        blit(pose, xPos, yPos, 0, 0.0F, 0.0F, 182, 5, 10, 182, color);
+        BarRendering.blit(pose, xPos, yPos, 0, 0.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 5 * 2), 182, 5, 10, 182, color);
         if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
             RenderSystem.setShaderTexture(0, PL_BARS_LOCATION);
             GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 300);
@@ -80,7 +67,7 @@ public class BarRendering {
 
         int i = (int)(bossEvent.getProgress() * 183.0F);
         if (i > 0) {
-            blit(pose, xPos, yPos, 0, 0.0F, 5.0F, i, 5, 10, 182, color);
+            BarRendering.blit(pose, xPos, yPos, 0, 0.0F, color != null ? 5.0F : (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i, 5, 10, 182, color);
             if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
                 RenderSystem.setShaderTexture(0, PL_BARS_LOCATION);
                 GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 300);
