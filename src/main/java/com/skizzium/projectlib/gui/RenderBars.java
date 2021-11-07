@@ -1,9 +1,9 @@
 package com.skizzium.projectlib.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.skizzium.projectlib.ProjectLib;
 import com.skizzium.projectlib.gui.minibar.LerpingMinibar;
-import com.skizzium.projectlib.gui.minibar.MinibarRendering;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.network.chat.Component;
@@ -18,6 +18,8 @@ public class RenderBars {
     private static final ResourceLocation VANILLA_BARS_LOCATION = new ResourceLocation("textures/gui/bars.png");
     private static final ResourceLocation PL_BARS_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/pl_bars.png");
     private static final ResourceLocation TEMPLATE_BAR_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/template_bar.png");
+    
+    private static final ResourceLocation PL_MINIBARS_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/pl_minibars.png");
     private static final ResourceLocation TEMPLATE_MINIBAR_PARTS_LOCATION = new ResourceLocation(ProjectLib.MOD_ID, "textures/gui/template_minibar_parts.png");
     
     private static final Minecraft minecraft = Minecraft.getInstance();
@@ -37,18 +39,18 @@ public class RenderBars {
                     RenderSystem.setShaderTexture(0, TEMPLATE_MINIBAR_PARTS_LOCATION);
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
-                    MinibarRendering.drawCustomColoredMinibar(event.getMatrixStack(), ((LerpingMinibar) lerpingEvent).getCustomHexColor(), (LerpingMinibar) lerpingEvent);
+                    RenderBars.drawMinibar(event.getMatrixStack(), ((LerpingMinibar) lerpingEvent).getCustomHexColor(), (LerpingMinibar) lerpingEvent);
                 }
                 else {
                     if (((LerpingMinibar) lerpingEvent).getCustomColor() != null) {
-                        RenderSystem.setShaderTexture(0, PL_BARS_LOCATION);
+                        RenderSystem.setShaderTexture(0, PL_MINIBARS_LOCATION);
                     }
                     else {
                         RenderSystem.setShaderTexture(0, TEMPLATE_MINIBAR_PARTS_LOCATION);
                     }
                     RenderSystem.enableBlend();
                     RenderSystem.defaultBlendFunc();
-                    MinibarRendering.drawMinibar(event.getMatrixStack(), (LerpingMinibar) lerpingEvent);
+                    RenderBars.drawMinibar(event.getMatrixStack(), ((LerpingMinibar) lerpingEvent).getCustomColor() != null ? null : 0xFFFFFF, (LerpingMinibar) lerpingEvent);
                 }
                 RenderSystem.disableBlend();
             }
@@ -95,5 +97,48 @@ public class RenderBars {
         } 
     }
 
+    /*
+     * Quick note on how I'm rendering the mini-bars:
+     * I'm first rendering the beginning parts, then the fillers and then the ending parts.
+     * The parts are ordered as follows: first bar beginning, default beginning, filler, default ending, last bar ending
+     */
+    public static void drawMinibar(PoseStack pose, Integer color, LerpingMinibar bossEvent) {
+        PL_LerpingBossEvent parent = null;
 
+        for (LerpingBossEvent event : Minecraft.getInstance().gui.getBossOverlay().events.values()) {
+            if (event instanceof PL_LerpingBossEvent && ((PL_LerpingBossEvent) event).getMinibars().contains(bossEvent)) {
+                parent = (PL_LerpingBossEvent) event;
+                break;
+            }
+        }
+
+        if (parent != null) {
+            boolean isStart = parent.getMinibars().indexOf(bossEvent) == 0;
+            boolean isEnd = parent.getMinibars().indexOf(bossEvent) == parent.getMinibars().size() - 1;
+            boolean isStartOrEnd = isStart || isEnd;
+            int width = 182 / parent.getMinibars().size();
+            int fillerWidth = width - (isStartOrEnd ? 5 : 3);
+
+            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), isStart ? 4 : 2, 2, color != null ? 5 : 56, 16, color);
+            for (int i = 0; i <= fillerWidth; i++) {
+                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + i + (isStart ? 5 : 3)), parent.yPos + 5, 0, 8.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), 1, 2, color != null ? 5 : 56, 16, color);
+            }
+            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isEnd ? fillerWidth + 2 : width)), parent.yPos + 5, 0, isEnd ? 12.0F : 10.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), isEnd ? 4 : 1, 2, color != null ? 5 : 56, 16, color);
+
+            int progress = (int) (bossEvent.getProgress() * (fillerWidth + 1));
+            if (progress > 0) {
+                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), Math.min(progress, (isStart ? 4 : 2)), 2, color != null ? 5 : 56, 16, color);
+                for (int i = 0; i <= progress; i++) {
+                    if (progress > (isStart ? 4 : 2))
+                        BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + i + (isStart ? 5 : 3)), parent.yPos + 5, 0, 8.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), 1, 2, color != null ? 5 : 56, 16, color);
+                }
+
+                int endWidth = 0;
+                if (progress >= fillerWidth) {
+                    endWidth = fillerWidth - progress;
+                }
+                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isEnd ? fillerWidth + 2 : width)), parent.yPos + 5, 0, isEnd ? 12.0F : 10.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), endWidth, 2, color != null ? 5 : 56, 16, color);
+            }
+        }
+    }
 }

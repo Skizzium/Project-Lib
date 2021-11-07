@@ -58,19 +58,20 @@ public class BarRendering {
         bossEvent.xPos = xPos;
         bossEvent.yPos = yPos;
         
-        BarRendering.blit(pose, xPos, yPos, 0, 0.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 5 * 2), 182, 5, 10, 182, color);
+        BarRendering.blit(pose, xPos, yPos, 0, 0.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 5 * 2), 182, 5, color != null ? 10 : 256, color != null ? 182 : 256, color);
         if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
             RenderSystem.setShaderTexture(0, PL_BARS_LOCATION);
-            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 300);
-            RenderSystem.setShaderTexture(0, TEMPLATE_BAR_LOCATION);
+            GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2), 182, 5, 256, 256);
+            if (color != null)
+                RenderSystem.setShaderTexture(0, TEMPLATE_BAR_LOCATION);
         }
 
         int i = (int)(bossEvent.getProgress() * 183.0F);
         if (i > 0) {
-            BarRendering.blit(pose, xPos, yPos, 0, 0.0F, color != null ? 5.0F : (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i, 5, 10, 182, color);
+            BarRendering.blit(pose, xPos, yPos, 0, 0.0F, color != null ? 5.0F : (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i, 5, color != null ? 10 : 256, color != null ? 182 : 256, color);
             if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
                 RenderSystem.setShaderTexture(0, PL_BARS_LOCATION);
-                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 300);
+                GuiComponent.blit(pose, xPos, yPos, 0, 0.0F, (float)(150 + (bossEvent.getCustomOverlay().ordinal() - 1) * 5 * 2 + 5), i, 5, 256, 256);
             }
         }
     }
