@@ -6,10 +6,6 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.LerpingBossEvent;
 
 public class MinibarRendering {
-    private static int calculateMinibarWidth(boolean isStartOrEnd, PL_LerpingBossEvent parent) {
-        return 182 / parent.getMinibars().size() - (isStartOrEnd ? 5 : 3);
-    }
-    
     // Old, currently doesn't work.
     public static void drawMinibar(PoseStack pose, LerpingMinibar bossEvent) {
         PL_LerpingBossEvent parent = null;
@@ -60,18 +56,18 @@ public class MinibarRendering {
             boolean isStart = parent.getMinibars().indexOf(bossEvent) == 0;
             boolean isEnd = parent.getMinibars().indexOf(bossEvent) == parent.getMinibars().size() - 1;
             boolean isStartOrEnd = isStart || isEnd;
-            int width = calculateMinibarWidth(isStartOrEnd, parent);
-            int averageWidth = 182 / parent.getMinibars().size();
+            int width = 182 / parent.getMinibars().size();
+            int fillerWidth = width - (isStartOrEnd ? 5 : 3);
             
-            BarRendering.blit(pose, parent.xPos + (averageWidth * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, 3.0F, isStart ? 4 : 2, 2, 5, 16, color);
-            for (int i = 0; i <= width; i++) {
-                BarRendering.blit(pose, parent.xPos + (averageWidth * parent.getMinibars().indexOf(bossEvent) + i + (isStart ? 5 : 3)), parent.yPos + 5, 0, 8.0F, 3.0F, 1, 2, 5, 16, color);
+            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, 3.0F, isStart ? 4 : 2, 2, 5, 16, color);
+            for (int i = 0; i <= fillerWidth; i++) {
+                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + i + (isStart ? 5 : 3)), parent.yPos + 5, 0, 8.0F, 3.0F, 1, 2, 5, 16, color);
             }
-            BarRendering.blit(pose, parent.xPos + (averageWidth * parent.getMinibars().indexOf(bossEvent) + (isEnd ? width + 2 : averageWidth)), parent.yPos + 5, 0, isEnd ? 12.0F : 10.0F, 3.0F, isEnd ? 4 : 1, 2, 5, 16, color);
+            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isEnd ? fillerWidth + 2 : width)), parent.yPos + 5, 0, isEnd ? 12.0F : 10.0F, 3.0F, isEnd ? 4 : 1, 2, 5, 16, color);
             
 //            int i = (int) (bossEvent.getProgress() * 37.0F);
 //            if (i > 0) {
-//                BarRendering.blit(pose, parent.xPos + (averageWidth * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, 3.0F, Math.min(i, (isStart ? 4 : 2)), 2, 5, 16, color);
+//                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, 3.0F, Math.min(i, (isStart ? 4 : 2)), 2, 5, 16, color);
 //            }
         }
     }
