@@ -44,6 +44,7 @@ public class PL_LerpingBossEvent extends LerpingBossEvent {
     }
 
     public void setMinibars(ArrayList<UUID> minibars) {
+        this.minibars.clear();
         for (UUID id : minibars) {
             this.minibars.add((LerpingMinibar) Minecraft.getInstance().gui.getBossOverlay().events.get(id));
         }
