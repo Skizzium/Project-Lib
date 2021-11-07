@@ -47,7 +47,7 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         }
     }
     
-    public void setMinibars(ArrayList<ServerMinibar> minibars) {
+    public void setMinibars(List<ServerMinibar> minibars) {
         if (minibars != this.minibars) {
             super.setMinibars(minibars);
             this.broadcastUpdatePacket();

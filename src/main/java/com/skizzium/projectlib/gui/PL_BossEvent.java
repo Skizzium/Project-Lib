@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public abstract class PL_BossEvent {
@@ -14,7 +15,7 @@ public abstract class PL_BossEvent {
     protected Component name;
     protected float progress;
     protected Entity entity;
-    protected ArrayList<ServerMinibar> minibars;
+    protected List<ServerMinibar> minibars;
     protected SoundEvent bossMusic;
     @Nullable
     protected Integer customColor;
@@ -62,7 +63,7 @@ public abstract class PL_BossEvent {
         return this.entity;
     }
 
-    public ArrayList<ServerMinibar> getMinibars() {
+    public List<ServerMinibar> getMinibars() {
         return this.minibars;
     }
 
@@ -70,7 +71,7 @@ public abstract class PL_BossEvent {
         this.minibars.add(minibar);
     }
     
-    public void setMinibars(ArrayList<ServerMinibar> minibars) {
+    public void setMinibars(List<ServerMinibar> minibars) {
         this.minibars = minibars;
     }
 
@@ -130,7 +131,7 @@ public abstract class PL_BossEvent {
     public static class BossEventProperties {
         boolean darkenScreen;
         boolean createWorldFog;
-        ArrayList<ServerMinibar> minibars = new ArrayList<>();
+        List<ServerMinibar> minibars = new ArrayList<>();
         @Nullable
         SoundEvent music;
         @Nullable

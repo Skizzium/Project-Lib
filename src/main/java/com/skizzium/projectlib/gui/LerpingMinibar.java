@@ -1,8 +1,6 @@
 package com.skizzium.projectlib.gui;
 
 import net.minecraft.client.gui.components.LerpingBossEvent;
-import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,7 +16,7 @@ public class LerpingMinibar extends LerpingBossEvent {
     private PL_BossEvent.PL_BossBarColor customColor;
 
     public LerpingMinibar(UUID uuid, float progressPercentage, Entity entity, @Nullable Integer customColor, PL_BossEvent.PL_BossBarColor color) {
-        super(uuid, new TextComponent("Mini-Bar"), progressPercentage, BossBarColor.WHITE, BossBarOverlay.PROGRESS, false, false, false);
+        super(uuid, new TextComponent("Minibar"), progressPercentage, BossBarColor.WHITE, BossBarOverlay.PROGRESS, false, false, false);
         this.customHexColor = customColor;
         this.customColor = color;
         this.entity = entity;

@@ -1,21 +1,19 @@
 package com.skizzium.projectlib.gui;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.skizzium.projectlib.init.PL_PacketRegistry;
 import com.skizzium.projectlib.network.BossEventPacket;
-import com.skizzium.projectlib.network.BossMusicPacket;
 import com.skizzium.projectlib.network.MinibarPacket;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 public class ServerMinibar extends Minibar {
     private final Set<ServerPlayer> players = Sets.newHashSet();

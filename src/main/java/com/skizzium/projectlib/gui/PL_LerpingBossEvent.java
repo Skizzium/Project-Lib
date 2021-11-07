@@ -10,12 +10,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @OnlyIn(Dist.CLIENT)
 public class PL_LerpingBossEvent extends LerpingBossEvent {
     private Entity entity;
-    private ArrayList<LerpingMinibar> minibars = new ArrayList<>();
+    private List<LerpingMinibar> minibars = new ArrayList<>();
     public SoundInstance music;
     private Integer customHexColor;
     private PL_BossEvent.PL_BossBarColor customColor;
@@ -24,7 +25,7 @@ public class PL_LerpingBossEvent extends LerpingBossEvent {
     public int xPos;
     public int yPos;
 
-    public PL_LerpingBossEvent(UUID uuid, Component displayName, float progressPercentage, Entity entity, ArrayList<UUID> minibars, @Nullable Integer customColor, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
+    public PL_LerpingBossEvent(UUID uuid, Component displayName, float progressPercentage, Entity entity, List<UUID> minibars, @Nullable Integer customColor, PL_BossEvent.PL_BossBarColor color, PL_BossEvent.PL_BossBarOverlay overlay, boolean darkenScreen, boolean fog) {
         super(uuid, displayName, progressPercentage, BossBarColor.WHITE, BossBarOverlay.PROGRESS, darkenScreen, false, fog);
         this.entity = entity;
         for (UUID id : minibars) {
@@ -39,11 +40,11 @@ public class PL_LerpingBossEvent extends LerpingBossEvent {
         return this.entity;
     }
     
-    public ArrayList<LerpingMinibar> getMinibars() {
+    public List<LerpingMinibar> getMinibars() {
         return this.minibars;
     }
 
-    public void setMinibars(ArrayList<UUID> minibars) {
+    public void setMinibars(List<UUID> minibars) {
         this.minibars.clear();
         for (UUID id : minibars) {
             this.minibars.add((LerpingMinibar) Minecraft.getInstance().gui.getBossOverlay().events.get(id));
