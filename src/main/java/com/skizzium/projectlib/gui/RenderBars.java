@@ -119,25 +119,21 @@ public class RenderBars {
             int width = 180 / parent.getMinibars().size();
             int fillerWidth = width - (isStartOrEnd ? 5 : 3);
 
-            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), isStart ? 4 : 2, 2, color != null ? 5 : 56, 16, color);
-            for (int i = 0; i <= fillerWidth; i++) {
-                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + i + (isStart ? 5 : 3)), parent.yPos + 5, 0, 8.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), 1, 2, color != null ? 5 : 56, 16, color);
-            }
-            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isEnd ? fillerWidth + 2 : width)), parent.yPos + 5, 0, isEnd ? 12.0F : 10.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), isEnd ? 4 : 1, 2, color != null ? 5 : 56, 16, color);
+            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), isStart ? 4 : 2, 2, color != null ? 5 : 56, 193, color);
+            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isStart ? 5 : 3)), parent.yPos + 5, 0, 15.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), fillerWidth, 2, color != null ? 5 : 56, 193, color);
+            BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isEnd ? fillerWidth + 2 : width)), parent.yPos + 5, 0, isEnd ? 10.0F : 8.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), isEnd ? 4 : 1, 2, color != null ? 5 : 56, 193, color);
 
             int progress = (int) (bossEvent.getProgress() * (fillerWidth + 1));
             if (progress > 0) {
-                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), Math.min(progress, (isStart ? 4 : 2)), 2, color != null ? 5 : 56, 16, color);
-                for (int i = 0; i <= progress; i++) {
-                    if (progress > (isStart ? 4 : 2))
-                        BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + i + (isStart ? 5 : 3)), parent.yPos + 5, 0, 8.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), 1, 2, color != null ? 5 : 56, 16, color);
-                }
+                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), Math.min(progress, (isStart ? 4 : 2)), 2, color != null ? 5 : 56, 193, color);
+                if (progress > (isStart ? 4 : 2))
+                    BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isStart ? 5 : 3)), parent.yPos + 5, 0, 15.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), progress, 2, color != null ? 5 : 56, 193, color);
 
                 int endWidth = 0;
                 if (progress >= fillerWidth) {
                     endWidth = fillerWidth - progress;
                 }
-                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isEnd ? fillerWidth + 2 : width)), parent.yPos + 5, 0, isEnd ? 12.0F : 10.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), endWidth, 2, color != null ? 5 : 56, 16, color);
+                BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + (isEnd ? fillerWidth + 2 : width)), parent.yPos + 5, 0, isEnd ? 10.0F : 8.0F, color != null ? 3.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2 + 2), endWidth, 2, color != null ? 5 : 56, 16, color);
             }
         }
     }
