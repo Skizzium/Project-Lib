@@ -116,7 +116,7 @@ public class RenderBars {
             boolean isStart = parent.getMinibars().indexOf(bossEvent) == 0;
             boolean isEnd = parent.getMinibars().indexOf(bossEvent) == parent.getMinibars().size() - 1;
             boolean isStartOrEnd = isStart || isEnd;
-            int width = 182 / parent.getMinibars().size();
+            int width = 180 / parent.getMinibars().size();
             int fillerWidth = width - (isStartOrEnd ? 5 : 3);
 
             BarRendering.blit(pose, parent.xPos + (width * parent.getMinibars().indexOf(bossEvent) + 1), parent.yPos + 5, 0, isStart ? 0.0F : 5.0F, color != null ? 0.0F : (float)(bossEvent.getCustomColor().ordinal() * 2 * 2), isStart ? 4 : 2, 2, color != null ? 5 : 56, 16, color);
