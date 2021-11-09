@@ -66,7 +66,7 @@ public class BarRendering {
                 RenderSystem.setShaderTexture(0, TEMPLATE_BAR_LOCATION);
         }
 
-        int i = (int)(bossEvent.getProgress() * 183.0F);
+        int i = (int)(bossEvent.getProgress() * 182.0F);
         if (i > 0) {
             BarRendering.blit(pose, xPos, yPos, 0, 0.0F, color != null ? 5.0F : (float)(bossEvent.getCustomColor().ordinal() * 5 * 2 + 5), i, 5, color != null ? 10 : 256, color != null ? 182 : 256, color);
             if (bossEvent.getCustomOverlay() != PL_BossEvent.PL_BossBarOverlay.PROGRESS) {
