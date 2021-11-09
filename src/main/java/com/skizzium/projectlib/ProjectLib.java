@@ -1,6 +1,8 @@
 package com.skizzium.projectlib;
 
-import com.skizzium.projectlib.gui.*;
+import com.skizzium.projectlib.entity.BossEntity;
+import com.skizzium.projectlib.gui.PL_BossEvent;
+import com.skizzium.projectlib.gui.PL_ServerBossEvent;
 import com.skizzium.projectlib.gui.minibar.Minibar;
 import com.skizzium.projectlib.gui.minibar.ServerMinibar;
 import net.minecraft.client.renderer.entity.PigRenderer;
@@ -47,17 +49,12 @@ public class ProjectLib {
 
         return i;
     }
-    
-    @SubscribeEvent
-    public static void renderBars() {
-        
-    }
 
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, ProjectLib.MOD_ID);
     private static final RegistryObject<EntityType<TestBoss>> ENTITY = ENTITIES.register("test_boss", () -> EntityType.Builder.of(TestBoss::new, MobCategory.CREATURE).sized(1, 1).build("test_boss"));
 
     @SubscribeEvent
-    public void onRegisterAttributes(final EntityAttributeCreationEvent event) {
+    public void registerAttributes(final EntityAttributeCreationEvent event) {
         event.put(ENTITY.get(), Pig.createAttributes().build());
     }
 
@@ -69,7 +66,7 @@ public class ProjectLib {
         }
     }
 
-    private static class TestBoss extends Pig {
+    private static class TestBoss extends Pig implements BossEntity {
         private final ServerMinibar[] minibars = {new ServerMinibar(this, new Minibar.MinibarProperties().color(0x0FF1CE)),
                                             new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.LIME)),
                                             new ServerMinibar(this, new Minibar.MinibarProperties().color(0xFF0000))};
@@ -83,22 +80,23 @@ public class ProjectLib {
         }
 
         @Override
+        public PL_ServerBossEvent getBossBar() {
+            return bossBar;
+        }
+
+        @Override
         public void startSeenByPlayer(ServerPlayer serverPlayer) {
             super.startSeenByPlayer(serverPlayer);
-            this.bossBar.addPlayer(serverPlayer);
         }
 
         @Override
         public void stopSeenByPlayer(ServerPlayer serverPlayer) {
             super.stopSeenByPlayer(serverPlayer);
-            this.bossBar.removePlayer(serverPlayer);
         }
 
         @Override
         protected void customServerAiStep() {
             super.customServerAiStep();
-            this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());
-            this.bossBar.getMinibars().forEach((bar) -> bar.setProgress(this.getHealth() / this.getMaxHealth()));
         }
     }
 }

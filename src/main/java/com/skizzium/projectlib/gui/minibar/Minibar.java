@@ -22,6 +22,7 @@ public abstract class Minibar {
         this.entity = entity;
         this.customColor = properties.customColor;
         this.color = properties.color;
+        this.autoUpdate = properties.autoUpdate;
     }
 
     public UUID getId() {

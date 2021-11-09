@@ -1,16 +1,25 @@
 package com.skizzium.projectlib.gui;
 
+import com.skizzium.projectlib.ProjectLib;
+import com.skizzium.projectlib.entity.BossEntity;
 import com.skizzium.projectlib.gui.minibar.ServerMinibar;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Mod.EventBusSubscriber(modid = ProjectLib.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public abstract class PL_BossEvent {
     private final UUID id;
     protected Component name;
@@ -168,6 +177,36 @@ public abstract class PL_BossEvent {
 
     public void setUpdateAutomatically(boolean flag) {
         this.autoUpdate = flag;
+    }
+
+    @SubscribeEvent
+    public static void renderBars(PlayerEvent.StartTracking event) {
+        Entity entity = event.getTarget();
+        if (entity instanceof BossEntity && ((BossEntity) entity).getBossBar().shouldRenderAutomatically() && event.getPlayer() instanceof ServerPlayer player) {
+            ((BossEntity) entity).getBossBar().addPlayer(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void unrenderBars(PlayerEvent.StopTracking event) {
+        Entity entity = event.getTarget();
+        if (entity instanceof BossEntity && ((BossEntity) entity).getBossBar().shouldRenderAutomatically() && event.getPlayer() instanceof ServerPlayer player) {
+            ((BossEntity) entity).getBossBar().removePlayer(player);
+        }
+    }
+
+    @SubscribeEvent
+    public static void updateBars(LivingEvent.LivingUpdateEvent event) {
+        LivingEntity boss = event.getEntityLiving();
+        if (boss instanceof BossEntity && ((BossEntity) boss).getBossBar().shouldUpdateAutomatically() && ((BossEntity) boss).getBossBar().getEntity() instanceof LivingEntity entity) {
+            ((BossEntity) boss).getBossBar().setProgress(entity.getHealth() / entity.getMaxHealth());
+
+            for (ServerMinibar minibar : ((BossEntity) boss).getBossBar().getMinibars()) {
+                if (minibar.getEntity() instanceof LivingEntity minibarEntity && minibar.shouldUpdateAutomatically()) {
+                    minibar.setProgress(minibarEntity.getHealth() / entity.getMaxHealth());
+                }
+            }
+        }
     }
 
     public static class BossEventProperties {
