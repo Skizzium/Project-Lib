@@ -47,6 +47,11 @@ public class ProjectLib {
 
         return i;
     }
+    
+    @SubscribeEvent
+    public static void renderBars() {
+        
+    }
 
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, ProjectLib.MOD_ID);
     private static final RegistryObject<EntityType<TestBoss>> ENTITY = ENTITIES.register("test_boss", () -> EntityType.Builder.of(TestBoss::new, MobCategory.CREATURE).sized(1, 1).build("test_boss"));
@@ -59,7 +64,7 @@ public class ProjectLib {
     @Mod.EventBusSubscriber(modid = ProjectLib.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     private static class ClientEvents {
         @SubscribeEvent
-        public static void onRegisterRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+        public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ENTITY.get(), PigRenderer::new);
         }
     }
@@ -72,7 +77,7 @@ public class ProjectLib {
                                             new ServerMinibar(this, new Minibar.MinibarProperties().color(0xFFFFFF)),
                                             new ServerMinibar(this, new Minibar.MinibarProperties()),
                                             new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.GOLD))};
-        private final PL_ServerBossEvent bossBar = new PL_ServerBossEvent(this, this.getDisplayName(), new PL_BossEvent.BossEventProperties().music(SoundEvents.MUSIC_DISC_PIGSTEP).customColor(0xFFC0CB).overlay(PL_BossEvent.PL_BossBarOverlay.NOTCHED_5));
+        private final PL_ServerBossEvent bossBar = new PL_ServerBossEvent(this, this.getDisplayName(), new PL_BossEvent.BossEventProperties().music(SoundEvents.MUSIC_DISC_PIGSTEP).color(0xFFC0CB).overlay(PL_BossEvent.PL_BossBarOverlay.NOTCHED_5));
 
         public TestBoss(EntityType<? extends Pig> type, Level world) {
             super(type, world);

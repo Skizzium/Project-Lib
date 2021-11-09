@@ -14,6 +14,7 @@ public abstract class Minibar {
     protected Integer customColor;
     @Nullable
     protected PL_BossEvent.PL_BossBarColor color;
+    protected boolean autoUpdate
 
     public Minibar(UUID uuid, Entity entity, MinibarProperties properties) {
         this.id = uuid;
@@ -57,12 +58,26 @@ public abstract class Minibar {
         this.color = newColor;
     }
 
+    public boolean shouldUpdateAutomatically() {
+        return this.autoUpdate;
+    }
+
+    public void setUpdateAutomatically(boolean flag) {
+        this.autoUpdate = flag;
+    }
+
     public static class MinibarProperties {
+        boolean autoUpdate = true;
         @Nullable
         Integer customColor;
         @Nullable
         PL_BossEvent.PL_BossBarColor color;
 
+        public MinibarProperties updateProgressAutomatically(boolean flag) {
+            this.autoUpdate = flag;
+            return this;
+        }
+        
         public MinibarProperties color(@Nullable Integer customColor) {
             this.customColor = customColor;
             return this;

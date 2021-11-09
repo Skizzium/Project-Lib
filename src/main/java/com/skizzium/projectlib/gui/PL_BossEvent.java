@@ -25,6 +25,8 @@ public abstract class PL_BossEvent {
     protected PL_BossEvent.PL_BossBarOverlay overlay;
     protected boolean darkenScreen;
     protected boolean createWorldFog;
+    protected boolean autoRender;
+    protected boolean autoUpdate;
 
     public PL_BossEvent(UUID uuid, Component displayName, Entity entity, BossEventProperties properties) {
         this.id = uuid;
@@ -38,6 +40,8 @@ public abstract class PL_BossEvent {
         this.overlay = properties.overlay;
         this.darkenScreen = properties.darkenScreen;
         this.createWorldFog = properties.createWorldFog;
+        this.autoRender = properties.autoRender;
+        this.autoUpdate = properties.autoUpdate;
     }
 
     public UUID getId() {
@@ -115,23 +119,39 @@ public abstract class PL_BossEvent {
         return this.darkenScreen;
     }
 
-    public PL_BossEvent setDarkenScreen(boolean newValue) {
-        this.darkenScreen = newValue;
-        return this;
-    }
-
-    public PL_BossEvent setCreateWorldFog(boolean newValue) {
-        this.createWorldFog = newValue;
-        return this;
+    public void setDarkenScreen(boolean flag) {
+        this.darkenScreen = flag;
     }
 
     public boolean shouldCreateWorldFog() {
         return this.createWorldFog;
     }
 
+    public void setCreateWorldFog(boolean flag) {
+        this.createWorldFog = flag;
+    }
+
+    public boolean shouldRenderAutomatically() {
+        return this.autoRender;
+    }
+
+    public void setRenderAutomatically(boolean flag) {
+        this.autoRender = flag;
+    }
+
+    public boolean shouldUpdateAutomatically() {
+        return this.autoUpdate;
+    }
+
+    public void setUpdateAutomatically(boolean flag) {
+        this.autoUpdate = flag;
+    }
+
     public static class BossEventProperties {
         boolean darkenScreen;
         boolean createWorldFog;
+        boolean autoRender = true;
+        boolean autoUpdate = true;
         List<ServerMinibar> minibars = new ArrayList<>();
         @Nullable
         SoundEvent music;
@@ -156,12 +176,22 @@ public abstract class PL_BossEvent {
             return this;
         }
         
+        public BossEventProperties renderAutomatically(boolean flag) {
+            this.autoRender = flag;
+            return this;
+        }
+
+        public BossEventProperties updateProgressAutomatically(boolean flag) {
+            this.autoUpdate = flag;
+            return this;
+        }
+        
         public BossEventProperties music(@Nullable SoundEvent music) {
             this.music = music;
             return this;
         }
 
-        public BossEventProperties customColor(@Nullable Integer customColor) {
+        public BossEventProperties color(@Nullable Integer customColor) {
             this.customColor = customColor;
             return this;
         }

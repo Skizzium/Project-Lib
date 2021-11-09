@@ -1,3 +1,4 @@
 <p style="text-align:center">
-- Multibars can now have between 0 and 7 Mini-Bars
+- Bars now render and update automatically. This is toggleable via a property.
+<stroke>- Multibars can now have between 0 and 10 Minibars.</stroke>
 </p>

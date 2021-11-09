@@ -98,20 +98,18 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         }
     }
 
-    public PL_BossEvent setDarkenScreen(boolean flag) {
+    public void setDarkenScreen(boolean flag) {
         if (flag != this.darkenScreen) {
             super.setDarkenScreen(flag);
             this.broadcastUpdatePacket();
         }
-        return this;
     }
 
-    public PL_BossEvent setCreateWorldFog(boolean flag) {
+    public void setCreateWorldFog(boolean flag) {
         if (flag != this.createWorldFog) {
             super.setCreateWorldFog(flag);
             this.broadcastUpdatePacket();
         }
-        return this;
     }
 
     public void addPlayer(ServerPlayer player) {
