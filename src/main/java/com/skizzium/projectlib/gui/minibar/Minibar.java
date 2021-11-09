@@ -14,7 +14,7 @@ public abstract class Minibar {
     protected Integer customColor;
     @Nullable
     protected PL_BossEvent.PL_BossBarColor color;
-    protected boolean autoUpdate
+    protected boolean autoUpdate;
 
     public Minibar(UUID uuid, Entity entity, MinibarProperties properties) {
         this.id = uuid;
