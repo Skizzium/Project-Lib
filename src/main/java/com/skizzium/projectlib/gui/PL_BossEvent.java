@@ -34,8 +34,10 @@ public abstract class PL_BossEvent {
     protected PL_BossEvent.PL_BossBarOverlay overlay;
     protected boolean darkenScreen;
     protected boolean createWorldFog;
+    
     protected boolean autoRender;
     protected boolean autoUpdate;
+    protected boolean combinedHealth;
 
     public PL_BossEvent(UUID uuid, Component displayName, Entity entity, BossEventProperties properties) {
         this.id = uuid;
@@ -51,6 +53,7 @@ public abstract class PL_BossEvent {
         this.createWorldFog = properties.createWorldFog;
         this.autoRender = properties.autoRender;
         this.autoUpdate = properties.autoUpdate;
+        this.combinedHealth = properties.combinedHealth;
     }
 
     public UUID getId() {
@@ -179,6 +182,14 @@ public abstract class PL_BossEvent {
         this.autoUpdate = flag;
     }
 
+    public boolean hasCombinedHealth() {
+        return this.combinedHealth;
+    }
+
+    public void setCombinedHealth(boolean flag) {
+        this.combinedHealth = flag;
+    }
+
     @SubscribeEvent
     public static void renderBars(PlayerEvent.StartTracking event) {
         Entity entity = event.getTarget();
@@ -199,21 +210,29 @@ public abstract class PL_BossEvent {
     public static void updateBars(LivingEvent.LivingUpdateEvent event) {
         LivingEntity boss = event.getEntityLiving();
         if (boss instanceof BossEntity && ((BossEntity) boss).getBossBar().shouldUpdateAutomatically() && ((BossEntity) boss).getBossBar().getEntity() instanceof LivingEntity entity) {
-            ((BossEntity) boss).getBossBar().setProgress(entity.getHealth() / entity.getMaxHealth());
-
+            float progress = entity.getHealth() / entity.getMaxHealth();
             for (ServerMinibar minibar : ((BossEntity) boss).getBossBar().getMinibars()) {
                 if (minibar.getEntity() instanceof LivingEntity minibarEntity && minibar.shouldUpdateAutomatically()) {
                     minibar.setProgress(minibarEntity.getHealth() / entity.getMaxHealth());
                 }
+
+                if (((BossEntity) boss).getBossBar().hasCombinedHealth()); {
+                    progress += minibar.getProgress();
+                }
             }
+
+            ((BossEntity) boss).getBossBar().setProgress(progress);
         }
     }
 
     public static class BossEventProperties {
         boolean darkenScreen;
         boolean createWorldFog;
+        
         boolean autoRender = true;
         boolean autoUpdate = true;
+        boolean combinedHealth = false;
+        
         List<ServerMinibar> minibars = new ArrayList<>();
         @Nullable
         SoundEvent music;
@@ -245,6 +264,11 @@ public abstract class PL_BossEvent {
 
         public BossEventProperties updateProgressAutomatically(boolean flag) {
             this.autoUpdate = flag;
+            return this;
+        }
+
+        public BossEventProperties combinedHealth(boolean flag) {
+            this.combinedHealth = flag;
             return this;
         }
         
