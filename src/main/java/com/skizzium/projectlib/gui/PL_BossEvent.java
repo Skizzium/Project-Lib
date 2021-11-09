@@ -72,18 +72,34 @@ public abstract class PL_BossEvent {
         return this.minibars;
     }
 
+    public boolean isMinibar() {
+        return this.minibars.size() > 0;
+    }
+
     public void addMinibar(ServerMinibar minibar) {
         if (minibars.size() < 12) {
             this.minibars.add(minibar);
         }
     }
+
+    public void addMinibars(List<ServerMinibar> minibars) {
+        for (ServerMinibar minibar : minibars) {
+            this.addMinibar(minibar);
+        }
+    }
     
     public void setMinibars(List<ServerMinibar> minibars) {
         this.minibars.clear();
+        this.addMinibars(minibars);
+    }
+
+    public void removeMinibar(ServerMinibar minibar) {
+        this.minibars.remove(minibar);
+    }
+
+    public void removeMinibars(List<ServerMinibar> minibars) {
         for (ServerMinibar minibar : minibars) {
-            if (this.minibars.size() < 12) {
-                this.minibars.add(minibar);
-            }
+            this.removeMinibar(minibar);
         }
     }
 
