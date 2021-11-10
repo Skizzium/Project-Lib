@@ -1,5 +1,3 @@
 <p style="text-align:center">
-- Added new property "Combined Health"
-- Bars now render and update automatically. This is toggleable via a property.
-<stroke>- Multibars can now have between 0 and 12 Minibars.</stroke>
+- A Shit ton of bug fixes
 </p>

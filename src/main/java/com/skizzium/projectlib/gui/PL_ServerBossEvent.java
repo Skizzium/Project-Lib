@@ -42,16 +42,23 @@ public class PL_ServerBossEvent extends PL_BossEvent {
     }
 
     public void addMinibar(ServerMinibar minibar) {
-        if (!this.minibars.contains(minibar)) {
+        if (!this.minibars.contains(minibar) && minibars.size() < 12) {
             super.addMinibar(minibar);
-            this.broadcastUpdatePacket();
+            this.broadcastMinibarPacket(minibar, BossEventPacket.OperationType.ADD);
         }
     }
     
-    public void setMinibars(List<ServerMinibar> minibars) {
-        if (minibars != this.minibars) {
-            super.setMinibars(minibars);
-            this.broadcastUpdatePacket();
+//    public void setMinibars(List<ServerMinibar> minibars) {
+//        if (minibars != this.minibars) {
+//            super.setMinibars(minibars);
+//            this.broadcastUpdatePacket();
+//        }
+//    }
+
+    public void removeMinibar(ServerMinibar minibar) {
+        if (!this.minibars.contains(minibar) && minibars.size() < 12) {
+            super.addMinibar(minibar);
+            this.broadcastMinibarPacket(minibar, BossEventPacket.OperationType.REMOVE);
         }
     }
     
@@ -175,6 +182,15 @@ public class PL_ServerBossEvent extends PL_BossEvent {
     private void broadcastUpdatePacket() {
         if (this.visible) {
             for (ServerPlayer player : this.players) {
+                PL_PacketRegistry.INSTANCE.sendTo(new BossEventPacket(this, BossEventPacket.OperationType.UPDATE), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+            }
+        }
+    }
+
+    private void broadcastMinibarPacket(ServerMinibar minibar, BossEventPacket.OperationType operation) {
+        if (this.visible) {
+            for (ServerPlayer player : this.players) {
+                PL_PacketRegistry.INSTANCE.sendTo(new MinibarPacket(minibar, operation), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
                 PL_PacketRegistry.INSTANCE.sendTo(new BossEventPacket(this, BossEventPacket.OperationType.UPDATE), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
             }
         }

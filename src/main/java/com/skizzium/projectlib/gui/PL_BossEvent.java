@@ -89,9 +89,7 @@ public abstract class PL_BossEvent {
     }
 
     public void addMinibar(ServerMinibar minibar) {
-        if (minibars.size() < 12) {
-            this.minibars.add(minibar);
-        }
+        this.minibars.add(minibar);
     }
 
     public void addMinibars(List<ServerMinibar> minibars) {

@@ -3,8 +3,8 @@
   <groupId>com.skizzium.projectlib</groupId>
   <artifactId>BossUtilities-1.17.1</artifactId>
   <versioning>
-    <latest>1.0.0-beta.6</latest>
-    <release>1.0.0-beta.6</release>
+    <latest>1.0.0-beta.6.1-dev</latest>
+    <release>1.0.0-beta.6.1-dev</release>
     <versions>
       <version>1.0.0-alpha.3</version>
       <version>1.0.0-beta.1</version>
@@ -20,7 +20,8 @@
       <version>1.0.0-beta.4</version>
       <version>1.0.0-beta.5</version>
       <version>1.0.0-beta.6</version>
+      <version>1.0.0-beta.6.1-dev</version>
     </versions>
-    <lastUpdated>20211109204013</lastUpdated>
+    <lastUpdated>20211110083449</lastUpdated>
   </versioning>
 </metadata>

@@ -83,20 +83,5 @@ public class ProjectLib {
         public PL_ServerBossEvent getBossBar() {
             return bossBar;
         }
-
-        @Override
-        public void startSeenByPlayer(ServerPlayer serverPlayer) {
-            super.startSeenByPlayer(serverPlayer);
-        }
-
-        @Override
-        public void stopSeenByPlayer(ServerPlayer serverPlayer) {
-            super.stopSeenByPlayer(serverPlayer);
-        }
-
-        @Override
-        protected void customServerAiStep() {
-            super.customServerAiStep();
-        }
     }
 }
