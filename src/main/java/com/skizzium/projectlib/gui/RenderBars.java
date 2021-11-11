@@ -42,26 +42,28 @@ public class RenderBars {
                         break;
                     }
                 }
-                int[] widths = calculateWidths(parent.getMinibars().size());
-                
-                if (((LerpingMinibar) lerpingEvent).getCustomHexColor() != null) {
-                    RenderSystem.setShaderTexture(0, TEMPLATE_MINIBAR_PARTS_LOCATION);
-                    RenderSystem.enableBlend();
-                    RenderSystem.defaultBlendFunc();
-                    RenderBars.drawMinibar(event.getMatrixStack(), widths, ((LerpingMinibar) lerpingEvent).getCustomHexColor(), (LerpingMinibar) lerpingEvent, parent);
-                }
-                else {
-                    if (((LerpingMinibar) lerpingEvent).getCustomColor() != null) {
-                        RenderSystem.setShaderTexture(0, PL_MINIBARS_LOCATION);
+                if (parent != null) {
+                    int[] widths = calculateWidths(parent.getMinibars().size());
+
+                    if (((LerpingMinibar) lerpingEvent).getCustomHexColor() != null) {
+                        RenderSystem.setShaderTexture(0, TEMPLATE_MINIBAR_PARTS_LOCATION);
+                        RenderSystem.enableBlend();
+                        RenderSystem.defaultBlendFunc();
+                        RenderBars.drawMinibar(event.getMatrixStack(), widths, ((LerpingMinibar) lerpingEvent).getCustomHexColor(), (LerpingMinibar) lerpingEvent, parent);
                     }
                     else {
-                        RenderSystem.setShaderTexture(0, TEMPLATE_MINIBAR_PARTS_LOCATION);
+                        if (((LerpingMinibar) lerpingEvent).getCustomColor() != null) {
+                            RenderSystem.setShaderTexture(0, PL_MINIBARS_LOCATION);
+                        }
+                        else {
+                            RenderSystem.setShaderTexture(0, TEMPLATE_MINIBAR_PARTS_LOCATION);
+                        }
+                        RenderSystem.enableBlend();
+                        RenderSystem.defaultBlendFunc();
+                        RenderBars.drawMinibar(event.getMatrixStack(), widths, ((LerpingMinibar) lerpingEvent).getCustomColor() != null ? null : 0xFFFFFF, (LerpingMinibar) lerpingEvent, parent);
                     }
-                    RenderSystem.enableBlend();
-                    RenderSystem.defaultBlendFunc();
-                    RenderBars.drawMinibar(event.getMatrixStack(), widths, ((LerpingMinibar) lerpingEvent).getCustomColor() != null ? null : 0xFFFFFF, (LerpingMinibar) lerpingEvent, parent);
+                    RenderSystem.disableBlend();
                 }
-                RenderSystem.disableBlend();
             }
             else if (minecraft.gui.getBossOverlay().events.get(lerpingEvent.getId()) instanceof PL_LerpingBossEvent) {
                 if (((PL_LerpingBossEvent) lerpingEvent).getCustomHexColor() != null) {

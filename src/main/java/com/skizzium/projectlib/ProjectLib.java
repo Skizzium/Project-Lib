@@ -8,9 +8,12 @@ import com.skizzium.projectlib.gui.minibar.ServerMinibar;
 import net.minecraft.client.renderer.entity.PigRenderer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -82,6 +85,12 @@ public class ProjectLib {
         @Override
         public PL_ServerBossEvent getBossBar() {
             return bossBar;
+        }
+
+        @Override
+        public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
+            this.bossBar.addMinibar(new ServerMinibar(this, new Minibar.MinibarProperties()));
+            return super.mobInteract(pPlayer, pHand);
         }
     }
 }

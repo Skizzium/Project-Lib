@@ -47,6 +47,12 @@ public class PL_ServerBossEvent extends PL_BossEvent {
             this.broadcastMinibarPacket(minibar, BossEventPacket.OperationType.ADD);
         }
     }
+
+    public void addMinibars(List<ServerMinibar> minibars) {
+        for (ServerMinibar minibar : minibars) {
+            this.addMinibar(minibar);
+        }
+    }
     
 //    public void setMinibars(List<ServerMinibar> minibars) {
 //        if (minibars != this.minibars) {
@@ -55,10 +61,31 @@ public class PL_ServerBossEvent extends PL_BossEvent {
 //        }
 //    }
 
+    public void setMinibars(List<ServerMinibar> minibars) {
+        if (minibars != this.minibars) {
+            this.clearMinibars();
+            for (ServerMinibar minibar : minibars) {
+                super.addMinibar(minibar);
+            }
+        }
+    }
+    
+    public void clearMinibars() {
+        for (ServerMinibar minibar : minibars) {
+            this.removeMinibar(minibar);
+        }
+    }
+
     public void removeMinibar(ServerMinibar minibar) {
-        if (!this.minibars.contains(minibar) && minibars.size() < 12) {
-            super.addMinibar(minibar);
+        if (this.minibars.contains(minibar)) {
+            super.removeMinibar(minibar);
             this.broadcastMinibarPacket(minibar, BossEventPacket.OperationType.REMOVE);
+        }
+    }
+
+    public void removeMinibars(List<ServerMinibar> minibars) {
+        for (ServerMinibar minibar : minibars) {
+            this.removeMinibar(minibar);
         }
     }
     
@@ -190,6 +217,12 @@ public class PL_ServerBossEvent extends PL_BossEvent {
     private void broadcastMinibarPacket(ServerMinibar minibar, BossEventPacket.OperationType operation) {
         if (this.visible) {
             for (ServerPlayer player : this.players) {
+                if (operation == BossEventPacket.OperationType.ADD) {
+                    minibar.addPlayer(player);
+                }
+                else {
+                    minibar.removePlayer(player);
+                }
                 PL_PacketRegistry.INSTANCE.sendTo(new MinibarPacket(minibar, operation), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
                 PL_PacketRegistry.INSTANCE.sendTo(new BossEventPacket(this, BossEventPacket.OperationType.UPDATE), player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
             }

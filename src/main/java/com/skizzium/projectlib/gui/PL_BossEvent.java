@@ -84,7 +84,7 @@ public abstract class PL_BossEvent {
         return this.minibars;
     }
 
-    public boolean isMinibar() {
+    public boolean isMultibar() {
         return this.minibars.size() > 0;
     }
 
@@ -92,25 +92,8 @@ public abstract class PL_BossEvent {
         this.minibars.add(minibar);
     }
 
-    public void addMinibars(List<ServerMinibar> minibars) {
-        for (ServerMinibar minibar : minibars) {
-            this.addMinibar(minibar);
-        }
-    }
-    
-    public void setMinibars(List<ServerMinibar> minibars) {
-        this.minibars.clear();
-        this.addMinibars(minibars);
-    }
-
     public void removeMinibar(ServerMinibar minibar) {
         this.minibars.remove(minibar);
-    }
-
-    public void removeMinibars(List<ServerMinibar> minibars) {
-        for (ServerMinibar minibar : minibars) {
-            this.removeMinibar(minibar);
-        }
     }
 
     @Nullable
@@ -209,16 +192,22 @@ public abstract class PL_BossEvent {
         LivingEntity boss = event.getEntityLiving();
         if (boss instanceof BossEntity && ((BossEntity) boss).getBossBar().shouldUpdateAutomatically() && ((BossEntity) boss).getBossBar().getEntity() instanceof LivingEntity entity) {
             float progress = entity.getHealth() / entity.getMaxHealth();
+            float miniProgress = 0;
             for (ServerMinibar minibar : ((BossEntity) boss).getBossBar().getMinibars()) {
                 if (minibar.getEntity() instanceof LivingEntity minibarEntity && minibar.shouldUpdateAutomatically()) {
                     minibar.setProgress(minibarEntity.getHealth() / entity.getMaxHealth());
                 }
 
-                if (((BossEntity) boss).getBossBar().hasCombinedHealth()); {
-                    progress += minibar.getProgress();
+                if (((BossEntity) boss).getBossBar().hasCombinedHealth()) {
+                    miniProgress += minibar.getProgress();
                 }
             }
 
+            if (((BossEntity) boss).getBossBar().hasCombinedHealth()) {
+                progress += miniProgress;
+                progress /= ((BossEntity) boss).getBossBar().minibars.size();
+            }
+            
             ((BossEntity) boss).getBossBar().setProgress(progress);
         }
     }
