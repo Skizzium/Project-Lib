@@ -41,6 +41,13 @@ public class PL_ServerBossEvent extends PL_BossEvent {
         }
     }
 
+    public void setEntity(Entity entity) {
+        if (entity != this.entity) {
+            super.setEntity(entity);
+            this.broadcastUpdatePacket();
+        }
+    }
+
     public void addMinibar(ServerMinibar minibar) {
         if (!this.minibars.contains(minibar) && minibars.size() < 12) {
             super.addMinibar(minibar);

@@ -40,6 +40,10 @@ public class PL_LerpingBossEvent extends LerpingBossEvent {
     public Entity getEntity() {
         return this.entity;
     }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
     
     public List<LerpingMinibar> getMinibars() {
         return this.minibars;

@@ -26,6 +26,10 @@ public class LerpingMinibar extends LerpingBossEvent {
     public Entity getEntity() {
         return this.entity;
     }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
     
     @Nullable
     public Integer getCustomHexColor() {

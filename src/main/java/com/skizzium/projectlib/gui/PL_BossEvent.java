@@ -79,6 +79,10 @@ public abstract class PL_BossEvent {
     public Entity getEntity() {
         return this.entity;
     }
+    
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
 
     public List<ServerMinibar> getMinibars() {
         return this.minibars;

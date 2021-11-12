@@ -32,6 +32,7 @@ public class PL_PacketHandler {
             Map<UUID, LerpingBossEvent> vanillaEvents = Minecraft.getInstance().gui.getBossOverlay().events;
             LerpingMinibar lerpingBossEvent = (LerpingMinibar)vanillaEvents.get(packet.id);
 
+            lerpingBossEvent.setEntity(Minecraft.getInstance().level.getEntity(packet.entityId));
             lerpingBossEvent.setProgress(packet.progress);
             lerpingBossEvent.setCustomHexColor(packet.customColor);
             lerpingBossEvent.setCustomColor(packet.color);
@@ -84,6 +85,7 @@ public class PL_PacketHandler {
 
             lerpingBossEvent.setName(packet.name);
             lerpingBossEvent.setProgress(packet.progress);
+            lerpingBossEvent.setEntity(Minecraft.getInstance().level.getEntity(packet.entityId));
             lerpingBossEvent.setMinibars(packet.minibars);
             
             lerpingBossEvent.setCustomHexColor(packet.customColor);

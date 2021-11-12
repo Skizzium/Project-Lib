@@ -41,6 +41,10 @@ public abstract class Minibar {
         return this.entity;
     }
 
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
+
     @Nullable
     public Integer getCustomColor() {
         return this.customColor;

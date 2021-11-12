@@ -27,6 +27,13 @@ public class ServerMinibar extends Minibar {
         this.visible = true;
     }
 
+    public void setEntity(Entity entity) {
+        if (entity != this.entity) {
+            super.setEntity(entity);
+            this.broadcastUpdatePacket();
+        }
+    }
+    
     public void setProgress(float progress) {
         if (progress != this.progress) {
             super.setProgress(progress);
