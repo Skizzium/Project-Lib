@@ -1,3 +1,4 @@
 <p style="text-align:center">
-- Allow changing of the Entity [Untested!]
+- Currently, Minibars seem bugged. Use with caution!
+- Updated to 1.18
 </p>

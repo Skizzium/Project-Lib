@@ -22,9 +22,9 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -71,7 +71,7 @@ public class ProjectLib {
 
     private static class TestBoss extends Pig implements BossEntity {
         private final ServerMinibar[] minibars = {new ServerMinibar(this, new Minibar.MinibarProperties().color(0x0FF1CE)),
-                                            new ServerMinibar(this, new Minibar.MinibarProperties().color(PL_BossEvent.PL_BossBarColor.LIME)),
+                                            new ServerMinibar(this, new Minibar.MinibarProperties()),
                                             new ServerMinibar(this, new Minibar.MinibarProperties().color(0xFF0000))};
         private final PL_ServerBossEvent bossBar = new PL_ServerBossEvent(this, this.getDisplayName(), new PL_BossEvent.BossEventProperties().music(SoundEvents.MUSIC_DISC_PIGSTEP).color(0xFFC0CB).overlay(PL_BossEvent.PL_BossBarOverlay.NOTCHED_5));
 
