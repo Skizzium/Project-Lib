@@ -1,26 +1,26 @@
 modLoader="javafml"
-loaderVersion="38.0.0"
-license="GPLv3"
-issueTrackerURL="https://github.com/Skizzium/Project-Lib/issues"
+loaderVersion="${loader_version}"
+license="${mod_license}"
+issueTrackerURL="${mod_issues}"
 [[mods]]
-modId="bossutils"
-version="1.0.0-beta.6.3"
-displayName="Boss Utilities [Project Vault]"
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${toml_name}"
 #updateJSONURL=""
-displayURL="https://skizzium.com/"
-logoFile="logo.png"
-credits="Credits to diesieben07 (custom boss bar), PlatinPython for helping out A TON and all the helpful people in the Forge community for putting up with my stupidity and helping me out."
-authors="\n- Skizzium [Ownership], \n- uSkizzik [Coding]"
-description='''As the name implies, this is a library providing a lot of boss utilities so developers can do less coding. It allows for boss battle music (synchronized in the future), more customizable boss bars, minions, staging system and boss spawning (Similarly to the wither).'''
+displayURL="${mod_url}"
+logoFile="${mod_logo}"
+credits="${mod_credits}"
+authors="${mod_authors}"
+description='''${mod_description}'''
 [[dependencies.bossutils]]
     modId="forge"
     mandatory=true
-    versionRange="[38,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.bossutils]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,1.19)"
+    versionRange="${mc_versionRange}"
     ordering="NONE"
     side="BOTH"
