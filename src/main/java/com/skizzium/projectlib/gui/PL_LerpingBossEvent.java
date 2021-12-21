@@ -6,15 +6,12 @@ import net.minecraft.client.gui.components.LerpingBossEvent;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@OnlyIn(Dist.CLIENT)
 public class PL_LerpingBossEvent extends LerpingBossEvent {
     private Entity entity;
     private List<LerpingMinibar> minibars = new ArrayList<>();

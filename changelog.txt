@@ -1,3 +1,3 @@
 <p style="text-align:center">
-- Fix mods.toml error
+- Fix dedicated server errors
 </p>

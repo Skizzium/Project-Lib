@@ -1,6 +1,5 @@
 package com.skizzium.projectlib.init;
 
-import com.skizzium.projectlib.ProjectLib;
 import com.skizzium.projectlib.gui.minibar.LerpingMinibar;
 import com.skizzium.projectlib.gui.PL_LerpingBossEvent;
 import com.skizzium.projectlib.network.*;
@@ -11,13 +10,11 @@ import net.minecraft.client.sounds.MusicManager;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.sounds.Music;
 import net.minecraft.util.Mth;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = ProjectLib.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PL_PacketHandler {
     public static void handleMinibarPacket(MinibarPacket packet) {
         if (packet.opeartion.equals(BossEventPacket.OperationType.ADD)) {
